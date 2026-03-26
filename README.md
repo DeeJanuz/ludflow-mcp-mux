@@ -38,4 +38,4 @@ This produces `ludflow-plugin.zip` containing the manifest and all renderer file
 
 ## License
 
-MIT
+Proprietary — free to use, not open source. See [LICENSE](LICENSE) for details.
