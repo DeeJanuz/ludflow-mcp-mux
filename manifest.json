@@ -24,6 +24,7 @@
     "url": "https://app.ludflow.com/api/mcp",
     "auth": {
       "type": "oauth",
+      "client_id": "fc99d041-1923-416c-8173-a4c02ae9b3a7",
       "auth_url": "https://app.ludflow.com/oauth/authorize",
       "token_url": "https://app.ludflow.com/oauth/token",
       "scopes": ["mcp:tools"]
