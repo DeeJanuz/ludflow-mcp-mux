@@ -1,7 +1,7 @@
 {
   "name": "ludflow",
   "version": "0.2.0",
-  "description": "Ludflow MCP plugin for code intelligence and knowledge management",
+  "description": "Ludflow MCP Views plugin for code intelligence and knowledge management",
   "renderers": {
     "search_codebase": "search_results",
     "vector_search": "search_results",
@@ -20,6 +20,85 @@
     "manage_knowledge_entries": "knowledge_dex",
     "get_column_context": "column_context"
   },
+  "no_auto_push": [
+    "write_document",
+    "manage_data_draft",
+    "manage_knowledge_entries"
+  ],
+  "renderer_definitions": [
+    {
+      "name": "search_results",
+      "description": "Displays codebase search results grouped by type (code units, API endpoints, tables, concepts) with citation badges and click-to-expand panels. Also renders agent answers with inline citations when an 'answer' field is present.",
+      "scope": "tool",
+      "tools": ["search_codebase", "vector_search"],
+      "data_hint": "{ results: [{ type: 'code_unit' | 'api_endpoint' | 'table' | 'concept', name: string, filePath?: string, unitType?: string, method?: string, path?: string, dataSourceName?: string, parentName?: string, description?: string }], result_count?: number } | { answer: string, citations?: { documents?: [{ index: number, id: string, title: string, content?: string, status?: string, folder_name?: string }], code?: [{ index: number, id: string, name: string, filePath: string, unitType: string, lineStart?: number, lineEnd?: number, source?: string, complexity?: number, patterns?: string[] }], dataGovernance?: [{ index: number, id: string, tableName: string, dataSourceName: string, columns?: object[] }], api?: [{ index: number, id: string, method: string, path: string, description?: string, repositoryName?: string }], knowledgeDex?: [{ index: number, id: string, name: string, description?: string, scope?: string }], dataLake?: [{ index: number, id: string, connectionName: string, tablePath?: string }] } }"
+    },
+    {
+      "name": "code_units",
+      "description": "Renders code units (functions, classes, interfaces, types) with syntax-highlighted source, type/exported/complexity badges, file paths with line ranges, patterns, and collapsible references.",
+      "scope": "tool",
+      "tools": ["get_code_units"],
+      "data_hint": "[{ name: string, unit_type: string, file_path?: string, line_start?: number, line_end?: number, source?: string, exported?: boolean, complexity?: number, patterns?: (string | { name: string })[], references?: (string | { file_path?: string, name?: string })[] }]"
+    },
+    {
+      "name": "data_schema",
+      "description": "Displays data governance or data lake schema as collapsible table sections with columns showing name, type, primary key, nullable, description, and metadata tags.",
+      "scope": "tool",
+      "tools": ["get_data_schema", "get_data_lake_schema"],
+      "data_hint": "{ data_source: string, tables: [{ name: string, columns: [{ name: string, data_type: string, is_primary_key?: boolean, is_nullable?: boolean, description?: string, metadata?: Record<string, string> }] }] }"
+    },
+    {
+      "name": "data_draft_diff",
+      "description": "Renders a data governance draft as an interactive grid where each cell shows current vs proposed values. Users can accept, reject, modify individual changes, or add new values to empty cells. Includes summary bar with counts and bulk accept/submit.",
+      "scope": "tool",
+      "tools": ["manage_data_draft"],
+      "data_hint": "{ draft_id?: string, status?: string, data_source?: string, table?: string, changes: [{ id: string, table_name?: string, column_name: string, field_name: string, old_value: any, new_value: any, description?: string }] }",
+      "rule": "This renderer requires reviewRequired=true to enable accept/reject/submit UI. Without it, changes display read-only."
+    },
+    {
+      "name": "dependencies",
+      "description": "Shows import/export dependencies grouped by source file, with target file paths, import type badges (NAMED, DEFAULT, PACKAGE, etc.), and imported name chips.",
+      "scope": "tool",
+      "tools": ["get_dependencies"],
+      "data_hint": "[{ sourceFile: string, targetFile: string, importType?: string, importedNames?: string[] }]"
+    },
+    {
+      "name": "file_content",
+      "description": "Renders file content with syntax-highlighted code, line numbers, file size, line range indicators, and truncation warnings. Supports single or multiple files.",
+      "scope": "tool",
+      "tools": ["get_file_content"],
+      "data_hint": "{ files?: [{ path: string, content: string, size?: number, totalLines?: number, returnedLines?: { start: number, end: number }, truncated?: boolean }], file?: { path: string, content: string, size?: number, totalLines?: number, returnedLines?: { start: number, end: number }, truncated?: boolean } }"
+    },
+    {
+      "name": "module_overview",
+      "description": "Displays a module directory overview with repository badge, summary metrics (files, exports, internal/external deps), collapsible file tree, exports with type badges and signatures, and dependency listings.",
+      "scope": "tool",
+      "tools": ["get_module_overview"],
+      "data_hint": "{ directory: string, repository?: { name: string, fullName?: string }, summary?: { total_files: number, total_exports: number, total_internal_deps: number, total_external_deps: number }, file_tree?: [{ path: string, size?: number }], exports?: [{ name: string, type: string, file?: string, signature?: string }], internal_dependencies?: [{ source: string, target: string, imports?: string[] }], external_dependencies?: [{ source: string, target: string }] }"
+    },
+    {
+      "name": "analysis_stats",
+      "description": "Shows analysis overview with metric cards (repositories, code units, data sources, tables, business concepts) and per-repository detail cards with language, unit count, and last analyzed date.",
+      "scope": "tool",
+      "tools": ["get_analysis_stats"],
+      "data_hint": "{ analyzed_repositories: [{ name: string, fullName?: string, language?: string, codeUnitCount?: number, lastAnalyzedAt?: string }], totals: { repositories: number, codeUnits?: number, dataSources?: number, tables?: number, businessConcepts?: number }, unanalyzed_count?: number, unanalyzed_names?: string[] }"
+    },
+    {
+      "name": "knowledge_dex",
+      "description": "Renders business concept entries in a table with name, description, data source mappings, and per-entry accept/reject actions. Supports create/update/reference modes with rename diffs, attribute hierarchy with collapse toggles, and bulk accept/reject.",
+      "scope": "tool",
+      "tools": ["get_business_concepts", "manage_knowledge_entries"],
+      "data_hint": "{ entries?: [{ id?: string, name: string, description?: string, mode?: 'create' | 'update' | 'reference', reused?: boolean, parent_id?: string, previous?: { name?: string, description?: string }, attributes?: [{ id?: string, name: string, description?: string, mode?: 'create' | 'update' | 'reference', reused?: boolean, previous?: { name?: string, description?: string } }], mappings?: [{ dataSourceName: string, tableName?: string, columnName?: string }] }], entry?: object, mappings?: [{ entryName: string, dataSourceName: string, tableName?: string, columnName?: string }] }",
+      "rule": "For mutation actions (create, update, bulk_create, bulk_upsert), set reviewRequired=true to enable per-entry accept/reject. The 'action' toolArg controls display mode."
+    },
+    {
+      "name": "column_context",
+      "description": "Displays deep column context with breadcrumb navigation (data source > table > column), column metadata badges (type, nullable, PK), description, linked business concepts, document links, cross-column relationships, and metadata column details.",
+      "scope": "tool",
+      "tools": ["get_column_context"],
+      "data_hint": "{ column: { name: string, originalDataType?: string, nullable?: boolean, isPrimaryKey?: boolean, description?: string }, table: { name: string, dataSource?: { name: string } }, businessConcepts?: [{ name: string, description?: string, category?: string }], documentLinks?: [{ document: { id?: string, title: string } }], crossColumnLinks?: [{ direction?: 'outgoing' | 'incoming', linkedColumn: { name: string, table?: { name: string } } }], metadataColumns?: [{ name: string, dataType?: string, isRequired?: boolean, isSystemColumn?: boolean }] }"
+    }
+  ],
   "mcp": {
     "url": "https://app.ludflow.com/api/mcp",
     "auth": {

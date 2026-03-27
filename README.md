@@ -1,16 +1,16 @@
-# Ludflow MCP-Mux Plugin
+# Ludflow MCP Views Plugin
 
-Custom renderers for [Ludflow](https://ludflow.com) tools in [mcp-mux](https://github.com/DeeJanuz/mcp-mux).
+Custom renderers for [Ludflow](https://ludflow.com) tools in [MCP Views](https://github.com/DeeJanuz/ludflow-mcpviews).
 
 ## Installation
 
-Install via the mcp-mux plugin registry:
+Install via the MCP Views plugin registry:
 
 ```
-mcp-mux-cli plugin add ludflow
+mcp-views-cli plugin add ludflow
 ```
 
-Or install manually by downloading the latest release ZIP and extracting to `~/.mcp-mux/plugins/ludflow/`.
+Or install manually by downloading the latest release ZIP and extracting to `~/.mcp-views/plugins/ludflow/`.
 
 ## Building
 
