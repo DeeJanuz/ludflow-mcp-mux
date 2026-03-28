@@ -9,22 +9,17 @@
     "get_document": "document_preview",
     "write_document": "document_preview",
     "list_documents": "document_preview",
-    "get_data_schema": "data_schema",
-    "manage_data_draft": "data_draft_diff",
-    "get_data_lake_schema": "data_schema",
+    "get_data_schema": "structured_data",
+    "manage_data_draft": "structured_data",
+    "get_data_lake_schema": "structured_data",
     "get_dependencies": "dependencies",
     "get_file_content": "file_content",
     "get_module_overview": "module_overview",
     "get_analysis_stats": "analysis_stats",
-    "get_business_concepts": "knowledge_dex",
-    "manage_knowledge_entries": "knowledge_dex",
+    "get_business_concepts": "structured_data",
+    "manage_knowledge_entries": "structured_data",
     "get_column_context": "column_context"
   },
-  "no_auto_push": [
-    "write_document",
-    "manage_data_draft",
-    "manage_knowledge_entries"
-  ],
   "renderer_definitions": [
     {
       "name": "search_results",
@@ -41,19 +36,20 @@
       "data_hint": "[{ name: string, unit_type: string, file_path?: string, line_start?: number, line_end?: number, source?: string, exported?: boolean, complexity?: number, patterns?: (string | { name: string })[], references?: (string | { file_path?: string, name?: string })[] }]"
     },
     {
-      "name": "data_schema",
-      "description": "Displays data governance or data lake schema as collapsible table sections with columns showing name, type, primary key, nullable, description, and metadata tags.",
+      "name": "structured_data",
+      "description": "Tabular data with hierarchical rows, change tracking, sort/filter, and review mode",
       "scope": "tool",
       "tools": ["get_data_schema", "get_data_lake_schema"],
-      "data_hint": "{ data_source: string, tables: [{ name: string, columns: [{ name: string, data_type: string, is_primary_key?: boolean, is_nullable?: boolean, description?: string, metadata?: Record<string, string> }] }] }"
+      "data_hint": "{ title?: string, tables: [{ id: string, name: string, columns: [{ id: string, name: string }], rows: [{ id: string, cells: { [columnId]: { value: string } } }] }] }",
+      "rule": "Transform each database table into a structured_data table. Use columns: name, data_type, pk, nullable, description. Each database column becomes a row. Boolean fields (is_primary_key, is_nullable) become 'Yes' or empty string. Metadata tags can be appended to description. Push with push_content for read-only display."
     },
     {
-      "name": "data_draft_diff",
-      "description": "Renders a data governance draft as an interactive grid where each cell shows current vs proposed values. Users can accept, reject, modify individual changes, or add new values to empty cells. Includes summary bar with counts and bulk accept/submit.",
+      "name": "structured_data",
+      "description": "Tabular data with hierarchical rows, change tracking, sort/filter, and review mode",
       "scope": "tool",
       "tools": ["manage_data_draft"],
-      "data_hint": "{ draft_id?: string, status?: string, data_source?: string, table?: string, changes: [{ id: string, table_name?: string, column_name: string, field_name: string, old_value: any, new_value: any, description?: string }] }",
-      "rule": "This renderer requires reviewRequired=true to enable accept/reject/submit UI. Without it, changes display read-only."
+      "data_hint": "{ title?: string, tables: [{ id: string, name: string, columns: [{ id: string, name: string, change?: 'add'|'delete' }], rows: [{ id: string, cells: { [columnId]: { value: string, change?: 'add'|'delete'|'update' } } }] }] }",
+      "rule": "Transform draft changes into structured_data. Group changes by table_name into separate tables. Rows = database columns with changes. Columns = metadata field names. Set cell change markers: 'update' for modified values, 'add' for new values, 'delete' for removals. Push with push_review for accept/reject UI."
     },
     {
       "name": "dependencies",
@@ -84,12 +80,12 @@
       "data_hint": "{ analyzed_repositories: [{ name: string, fullName?: string, language?: string, codeUnitCount?: number, lastAnalyzedAt?: string }], totals: { repositories: number, codeUnits?: number, dataSources?: number, tables?: number, businessConcepts?: number }, unanalyzed_count?: number, unanalyzed_names?: string[] }"
     },
     {
-      "name": "knowledge_dex",
-      "description": "Renders business concept entries in a table with name, description, data source mappings, and per-entry accept/reject actions. Supports create/update/reference modes with rename diffs, attribute hierarchy with collapse toggles, and bulk accept/reject.",
+      "name": "structured_data",
+      "description": "Tabular data with hierarchical rows, change tracking, sort/filter, and review mode",
       "scope": "tool",
       "tools": ["get_business_concepts", "manage_knowledge_entries"],
-      "data_hint": "{ entries?: [{ id?: string, name: string, description?: string, mode?: 'create' | 'update' | 'reference', reused?: boolean, parent_id?: string, previous?: { name?: string, description?: string }, attributes?: [{ id?: string, name: string, description?: string, mode?: 'create' | 'update' | 'reference', reused?: boolean, previous?: { name?: string, description?: string } }], mappings?: [{ dataSourceName: string, tableName?: string, columnName?: string }] }], entry?: object, mappings?: [{ entryName: string, dataSourceName: string, tableName?: string, columnName?: string }] }",
-      "rule": "For mutation actions (create, update, bulk_create, bulk_upsert), set reviewRequired=true to enable per-entry accept/reject. The 'action' toolArg controls display mode."
+      "data_hint": "{ title?: string, tables: [{ id: string, name: string, columns: [{ id: string, name: string }], rows: [{ id: string, cells: { [columnId]: { value: string, change?: 'add'|'delete'|'update' } }, children?: [...] }] }] }",
+      "rule": "Transform entries into structured_data with one table. Columns: name, description, mode, mappings. Root entries become rows; attributes become children (hierarchical rows). For mutations (create/update), set change: 'add' for new entries, 'update' for modified, null for reference. Mappings cell = comma-joined 'dataSource.table.column' strings. For read-only listing use push_content; for mutation review use push_review."
     },
     {
       "name": "column_context",
