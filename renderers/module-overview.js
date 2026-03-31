@@ -6,7 +6,17 @@
 
   window.__renderers = window.__renderers || {};
 
-  var EXPORT_TYPE_COLORS = {
+  function injectTheme() {
+    if (document.getElementById('lf-theme')) return;
+    var s = document.createElement('style');
+    s.id = 'lf-theme';
+    s.textContent = ':root{--lf-bg:#ffffff;--lf-bg-subtle:#f9fafb;--lf-bg-hover:#f9fafb;--lf-border:#e5e5e5;--lf-border-light:#f3f4f6;--lf-text:#171717;--lf-text-secondary:#737373;--lf-text-tertiary:#a3a3a3;--lf-text-mono:#525252;--lf-link:#60a5fa;--lf-code-bg:#1e1e2e;--lf-code-text:#cdd6f4;--lf-code-line:#6c7086;--lf-badge-bg:#f3f4f6;--lf-badge-text:#374151;--lf-error-bg:#fef2f2;--lf-error-border:#fecaca;--lf-error-text:#991b1b}@media(prefers-color-scheme:dark){:root{--lf-bg:#1e1e2e;--lf-bg-subtle:#262637;--lf-bg-hover:#2a2a3c;--lf-border:#3b3b50;--lf-border-light:#2e2e42;--lf-text:#cdd6f4;--lf-text-secondary:#a6adc8;--lf-text-tertiary:#7f849c;--lf-text-mono:#bac2de;--lf-link:#89b4fa;--lf-code-bg:#181825;--lf-code-text:#cdd6f4;--lf-code-line:#585b70;--lf-badge-bg:#313244;--lf-badge-text:#bac2de;--lf-error-bg:#3b1c1c;--lf-error-border:#5c2626;--lf-error-text:#f87171}}';
+    document.head.appendChild(s);
+  }
+  injectTheme();
+  var isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  var EXPORT_TYPE_COLORS_LIGHT = {
     function: { bg: '#dbeafe', text: '#1e40af' },
     class: { bg: '#f3e8ff', text: '#6b21a8' },
     interface: { bg: '#dcfce7', text: '#166534' },
@@ -15,15 +25,27 @@
     method: { bg: '#e0e7ff', text: '#3730a3' },
     enum: { bg: '#ffedd5', text: '#9a3412' },
   };
+  var EXPORT_TYPE_COLORS_DARK = {
+    function: { bg: '#1e3a5f', text: '#93c5fd' },
+    class: { bg: '#3b0764', text: '#d8b4fe' },
+    interface: { bg: '#14532d', text: '#86efac' },
+    type: { bg: '#422006', text: '#fde68a' },
+    variable: { bg: '#313244', text: '#bac2de' },
+    method: { bg: '#312e81', text: '#a5b4fc' },
+    enum: { bg: '#431407', text: '#fdba74' },
+  };
+  var DEFAULT_EXPORT_COLOR_LIGHT = { bg: '#f3f4f6', text: '#374151' };
+  var DEFAULT_EXPORT_COLOR_DARK = { bg: '#313244', text: '#bac2de' };
 
-  var DEFAULT_EXPORT_COLOR = { bg: '#f3f4f6', text: '#374151' };
+  var EXPORT_TYPE_COLORS = isDark ? EXPORT_TYPE_COLORS_DARK : EXPORT_TYPE_COLORS_LIGHT;
+  var DEFAULT_EXPORT_COLOR = isDark ? DEFAULT_EXPORT_COLOR_DARK : DEFAULT_EXPORT_COLOR_LIGHT;
 
   var STYLES = {
-    summaryBar: 'display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:8px 12px;background:#f9fafb;border-radius:6px;flex-wrap:wrap;',
+    summaryBar: 'display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:8px 12px;background:var(--lf-bg-subtle);border-radius:6px;flex-wrap:wrap;',
     depRow: 'display:flex;align-items:center;gap:6px;padding:4px 8px;flex-wrap:wrap;',
-    monoSmall: 'font-family:monospace;font-size:12px;color:#171717;',
-    monoTarget: 'font-family:monospace;font-size:12px;color:#60a5fa;',
-    nameChip: 'display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-family:monospace;color:#737373;background:#f3f4f6;',
+    monoSmall: 'font-family:monospace;font-size:12px;color:var(--lf-text);',
+    monoTarget: 'font-family:monospace;font-size:12px;color:var(--lf-link);',
+    nameChip: 'display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-family:monospace;color:var(--lf-text-secondary);background:var(--lf-badge-bg);',
   };
 
   /**
@@ -45,13 +67,13 @@
     headerEl.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;';
 
     var dirEl = document.createElement('span');
-    dirEl.style.cssText = 'font-family:monospace;font-size:15px;font-weight:700;color:#171717;';
+    dirEl.style.cssText = 'font-family:monospace;font-size:15px;font-weight:700;color:var(--lf-text);';
     dirEl.textContent = overview.directory || '(unknown directory)';
     headerEl.appendChild(dirEl);
 
     var repo = overview.repository;
     if (repo) {
-      headerEl.appendChild(utils.createBadge(repo.name || repo.fullName || repo.full_name || '', '#dbeafe', '#1e40af'));
+      headerEl.appendChild(utils.createBadge(repo.name || repo.fullName || repo.full_name || '', isDark ? '#1e3a5f' : '#dbeafe', isDark ? '#93c5fd' : '#1e40af'));
     }
 
     container.appendChild(headerEl);
@@ -69,7 +91,7 @@
     ];
 
     for (var m = 0; m < metricItems.length; m++) {
-      summaryBar.appendChild(utils.createBadge(metricItems[m].value + ' ' + metricItems[m].label, '#f3f4f6', '#171717'));
+      summaryBar.appendChild(utils.createBadge(metricItems[m].value + ' ' + metricItems[m].label, isDark ? '#313244' : '#f3f4f6', isDark ? '#cdd6f4' : '#171717'));
     }
 
     container.appendChild(summaryBar);
@@ -83,13 +105,13 @@
           row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:3px 8px;';
 
           var pathSpan = document.createElement('span');
-          pathSpan.style.cssText = 'font-family:monospace;font-size:12px;color:#171717;';
+          pathSpan.style.cssText = 'font-family:monospace;font-size:12px;color:var(--lf-text);';
           pathSpan.textContent = fileTree[i].path || '';
           row.appendChild(pathSpan);
 
           if (fileTree[i].size != null) {
             var sizeStr = fileTree[i].size >= 1024 ? (fileTree[i].size / 1024).toFixed(1) + ' KB' : fileTree[i].size + ' B';
-            row.appendChild(utils.createBadge(sizeStr, '#f3f4f6', '#a3a3a3'));
+            row.appendChild(utils.createBadge(sizeStr, isDark ? '#313244' : '#f3f4f6', isDark ? '#7f849c' : '#a3a3a3'));
           }
 
           body.appendChild(row);
@@ -130,14 +152,14 @@
 
   function renderExportCard(exp, utils) {
     var card = document.createElement('div');
-    card.style.cssText = 'padding:8px 12px;margin:4px 0;background:#ffffff;border:1px solid #f3f4f6;border-radius:6px;';
+    card.style.cssText = 'padding:8px 12px;margin:4px 0;background:var(--lf-bg);border:1px solid var(--lf-border-light);border-radius:6px;';
 
     // Top row: name + type badge
     var topRow = document.createElement('div');
     topRow.style.cssText = 'display:flex;align-items:center;gap:8px;flex-wrap:wrap;';
 
     var nameEl = document.createElement('span');
-    nameEl.style.cssText = 'font-weight:600;color:#171717;font-size:13px;';
+    nameEl.style.cssText = 'font-weight:600;color:var(--lf-text);font-size:13px;';
     nameEl.textContent = exp.name || '(unnamed)';
     topRow.appendChild(nameEl);
 
@@ -150,7 +172,7 @@
     // File path
     if (exp.file) {
       var fileEl = document.createElement('div');
-      fileEl.style.cssText = 'font-family:monospace;font-size:11px;color:#737373;margin-top:2px;';
+      fileEl.style.cssText = 'font-family:monospace;font-size:11px;color:var(--lf-text-secondary);margin-top:2px;';
       fileEl.textContent = exp.file;
       card.appendChild(fileEl);
     }
@@ -158,7 +180,7 @@
     // Signature
     if (exp.signature) {
       var sigEl = document.createElement('div');
-      sigEl.style.cssText = 'font-family:monospace;font-size:11px;color:#a3a3a3;margin-top:4px;white-space:pre-wrap;word-break:break-all;';
+      sigEl.style.cssText = 'font-family:monospace;font-size:11px;color:var(--lf-text-tertiary);margin-top:4px;white-space:pre-wrap;word-break:break-all;';
       sigEl.textContent = exp.signature;
       card.appendChild(sigEl);
     }
@@ -176,7 +198,7 @@
     row.appendChild(source);
 
     var arrow = document.createElement('span');
-    arrow.style.cssText = 'color:#a3a3a3;font-size:12px;';
+    arrow.style.cssText = 'color:var(--lf-text-tertiary);font-size:12px;';
     arrow.textContent = '\u2192';
     row.appendChild(arrow);
 

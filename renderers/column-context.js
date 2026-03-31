@@ -6,21 +6,39 @@
 
   window.__renderers = window.__renderers || {};
 
-  var DATA_TYPE_COLORS = {
+  function injectTheme() {
+    if (document.getElementById('lf-theme')) return;
+    var s = document.createElement('style');
+    s.id = 'lf-theme';
+    s.textContent = ':root{--lf-bg:#ffffff;--lf-bg-subtle:#f9fafb;--lf-bg-hover:#f9fafb;--lf-border:#e5e5e5;--lf-border-light:#f3f4f6;--lf-text:#171717;--lf-text-secondary:#737373;--lf-text-tertiary:#a3a3a3;--lf-text-mono:#525252;--lf-link:#60a5fa;--lf-code-bg:#1e1e2e;--lf-code-text:#cdd6f4;--lf-code-line:#6c7086;--lf-badge-bg:#f3f4f6;--lf-badge-text:#374151;--lf-error-bg:#fef2f2;--lf-error-border:#fecaca;--lf-error-text:#991b1b}@media(prefers-color-scheme:dark){:root{--lf-bg:#1e1e2e;--lf-bg-subtle:#262637;--lf-bg-hover:#2a2a3c;--lf-border:#3b3b50;--lf-border-light:#2e2e42;--lf-text:#cdd6f4;--lf-text-secondary:#a6adc8;--lf-text-tertiary:#7f849c;--lf-text-mono:#bac2de;--lf-link:#89b4fa;--lf-code-bg:#181825;--lf-code-text:#cdd6f4;--lf-code-line:#585b70;--lf-badge-bg:#313244;--lf-badge-text:#bac2de;--lf-error-bg:#3b1c1c;--lf-error-border:#5c2626;--lf-error-text:#f87171}}';
+    document.head.appendChild(s);
+  }
+  injectTheme();
+  var isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  var DATA_TYPE_COLORS_LIGHT = {
     TEXT: { bg: '#dbeafe', text: '#1e40af' },
     DATE: { bg: '#fef9c3', text: '#854d0e' },
     MULTISELECT: { bg: '#f3e8ff', text: '#6b21a8' },
   };
+  var DATA_TYPE_COLORS_DARK = {
+    TEXT: { bg: '#1e3a5f', text: '#93c5fd' },
+    DATE: { bg: '#422006', text: '#fde68a' },
+    MULTISELECT: { bg: '#3b0764', text: '#d8b4fe' },
+  };
+  var DEFAULT_DATA_TYPE_COLOR_LIGHT = { bg: '#f3f4f6', text: '#374151' };
+  var DEFAULT_DATA_TYPE_COLOR_DARK = { bg: '#313244', text: '#bac2de' };
 
-  var DEFAULT_DATA_TYPE_COLOR = { bg: '#f3f4f6', text: '#374151' };
+  var DATA_TYPE_COLORS = isDark ? DATA_TYPE_COLORS_DARK : DATA_TYPE_COLORS_LIGHT;
+  var DEFAULT_DATA_TYPE_COLOR = isDark ? DEFAULT_DATA_TYPE_COLOR_DARK : DEFAULT_DATA_TYPE_COLOR_LIGHT;
 
   var STYLES = {
-    infoCard: 'padding:12px 16px;background:#ffffff;border:1px solid #e5e5e5;border-radius:8px;margin-bottom:12px;',
+    infoCard: 'padding:12px 16px;background:var(--lf-bg);border:1px solid var(--lf-border);border-radius:8px;margin-bottom:12px;',
     badgesRow: 'display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px;',
-    sectionHeading: 'font-size:12px;font-weight:600;color:#737373;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;',
+    sectionHeading: 'font-size:12px;font-weight:600;color:var(--lf-text-secondary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;',
     section: 'margin-bottom:12px;',
     metaRow: 'display:flex;align-items:center;gap:6px;padding:4px 8px;',
-    monoPath: 'font-family:monospace;font-size:12px;color:#171717;',
+    monoPath: 'font-family:monospace;font-size:12px;color:var(--lf-text);',
   };
 
   /**
@@ -49,12 +67,12 @@
     for (var p = 0; p < parts.length; p++) {
       if (p > 0) {
         var sep = document.createElement('span');
-        sep.style.cssText = 'color:#a3a3a3;font-size:14px;';
+        sep.style.cssText = 'color:var(--lf-text-tertiary);font-size:14px;';
         sep.textContent = '\u203A';
         breadcrumb.appendChild(sep);
       }
       var partEl = document.createElement('span');
-      partEl.style.cssText = 'font-family:monospace;font-size:15px;color:#171717;' + (p === parts.length - 1 ? 'font-weight:700;' : 'font-weight:500;');
+      partEl.style.cssText = 'font-family:monospace;font-size:15px;color:var(--lf-text);' + (p === parts.length - 1 ? 'font-weight:700;' : 'font-weight:500;');
       partEl.textContent = parts[p];
       breadcrumb.appendChild(partEl);
     }
@@ -71,19 +89,19 @@
     // Type badge
     var originalType = column.originalDataType || column.original_data_type || '';
     if (originalType) {
-      badgesRow.appendChild(utils.createBadge(originalType, '#e0e7ff', '#3730a3'));
+      badgesRow.appendChild(utils.createBadge(originalType, isDark ? '#312e81' : '#e0e7ff', isDark ? '#a5b4fc' : '#3730a3'));
     }
 
     // Nullable badge
     if (column.nullable) {
-      badgesRow.appendChild(utils.createBadge('NULLABLE', '#f3f4f6', '#737373'));
+      badgesRow.appendChild(utils.createBadge('NULLABLE', isDark ? '#313244' : '#f3f4f6', isDark ? '#a6adc8' : '#737373'));
     } else {
-      badgesRow.appendChild(utils.createBadge('NOT NULL', '#fef9c3', '#854d0e'));
+      badgesRow.appendChild(utils.createBadge('NOT NULL', isDark ? '#422006' : '#fef9c3', isDark ? '#fde68a' : '#854d0e'));
     }
 
     // PK badge
     if (column.isPrimaryKey || column.is_primary_key) {
-      badgesRow.appendChild(utils.createBadge('PRIMARY KEY', '#fef9c3', '#b45309'));
+      badgesRow.appendChild(utils.createBadge('PRIMARY KEY', isDark ? '#422006' : '#fef9c3', isDark ? '#fbbf24' : '#b45309'));
     }
 
     infoCard.appendChild(badgesRow);
@@ -91,7 +109,7 @@
     // Description
     if (column.description) {
       var descEl = document.createElement('div');
-      descEl.style.cssText = 'font-size:13px;color:#525252;line-height:1.5;';
+      descEl.style.cssText = 'font-size:13px;color:var(--lf-text-mono);line-height:1.5;';
       descEl.textContent = column.description;
       infoCard.appendChild(descEl);
     }
@@ -115,7 +133,7 @@
       for (var c = 0; c < concepts.length; c++) {
         var concept = concepts[c];
         var chip = document.createElement('span');
-        chip.style.cssText = 'display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:500;background:#f0fdfa;color:#0d9488;border:1px solid #ccfbf1;cursor:default;';
+        chip.style.cssText = 'display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:500;background:' + (isDark ? '#042f2e' : '#f0fdfa') + ';color:' + (isDark ? '#5eead4' : '#0d9488') + ';border:1px solid ' + (isDark ? '#115e59' : '#ccfbf1') + ';cursor:default;';
         chip.textContent = concept.name || '';
         if (concept.description) {
           chip.title = concept.description;
@@ -123,7 +141,7 @@
 
         if (concept.category) {
           var catBadge = document.createElement('span');
-          catBadge.style.cssText = 'font-size:10px;color:#a3a3a3;margin-left:2px;';
+          catBadge.style.cssText = 'font-size:10px;color:var(--lf-text-tertiary);margin-left:2px;';
           catBadge.textContent = '(' + concept.category + ')';
           chip.appendChild(catBadge);
         }
@@ -151,14 +169,14 @@
         var doc = link.document || {};
         var linkRow = document.createElement('div');
         linkRow.style.cssText = 'display:flex;align-items:center;gap:8px;padding:6px 10px;margin:2px 0;border-radius:6px;cursor:pointer;transition:background 0.15s;';
-        linkRow.addEventListener('mouseenter', function () { this.style.background = '#f9fafb'; });
+        linkRow.addEventListener('mouseenter', function () { this.style.background = 'var(--lf-bg-hover)'; });
         linkRow.addEventListener('mouseleave', function () { this.style.background = 'transparent'; });
 
         var docColor = utils.CITATION_COLORS.doc;
         linkRow.appendChild(utils.createBadge(docColor.label, docColor.hex + '15', docColor.hex));
 
         var titleEl = document.createElement('span');
-        titleEl.style.cssText = 'font-size:13px;font-weight:500;color:#171717;';
+        titleEl.style.cssText = 'font-size:13px;font-weight:500;color:var(--lf-text);';
         titleEl.textContent = doc.title || doc.id || '';
         linkRow.appendChild(titleEl);
 
@@ -190,7 +208,7 @@
         // Direction arrow
         var direction = crossLink.direction || '';
         var dirArrow = document.createElement('span');
-        dirArrow.style.cssText = 'font-size:14px;color:#a3a3a3;flex-shrink:0;';
+        dirArrow.style.cssText = 'font-size:14px;color:var(--lf-text-tertiary);flex-shrink:0;';
         if (direction === 'outgoing' || direction === 'OUTGOING') {
           dirArrow.textContent = '\u2192';
         } else if (direction === 'incoming' || direction === 'INCOMING') {
@@ -229,7 +247,7 @@
         metaRow.style.cssText = STYLES.metaRow;
 
         var metaName = document.createElement('span');
-        metaName.style.cssText = 'font-size:13px;font-weight:500;color:#171717;';
+        metaName.style.cssText = 'font-size:13px;font-weight:500;color:var(--lf-text);';
         metaName.textContent = metaCol.name || '';
         metaRow.appendChild(metaName);
 
@@ -240,12 +258,12 @@
 
         // Required indicator
         if (metaCol.isRequired || metaCol.is_required) {
-          metaRow.appendChild(utils.createBadge('REQUIRED', '#fee2e2', '#991b1b'));
+          metaRow.appendChild(utils.createBadge('REQUIRED', isDark ? '#3b1c1c' : '#fee2e2', isDark ? '#f87171' : '#991b1b'));
         }
 
         // System column indicator
         if (metaCol.isSystemColumn || metaCol.is_system_column) {
-          metaRow.appendChild(utils.createBadge('SYSTEM', '#f3f4f6', '#a3a3a3'));
+          metaRow.appendChild(utils.createBadge('SYSTEM', isDark ? '#313244' : '#f3f4f6', isDark ? '#7f849c' : '#a3a3a3'));
         }
 
         metaSection.appendChild(metaRow);

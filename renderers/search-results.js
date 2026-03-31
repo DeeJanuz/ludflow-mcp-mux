@@ -23,6 +23,16 @@
 
   window.__renderers = window.__renderers || {};
 
+  function injectTheme() {
+    if (document.getElementById('lf-theme')) return;
+    var s = document.createElement('style');
+    s.id = 'lf-theme';
+    s.textContent = ':root{--lf-bg:#ffffff;--lf-bg-subtle:#f9fafb;--lf-bg-hover:#f9fafb;--lf-border:#e5e5e5;--lf-border-light:#f3f4f6;--lf-text:#171717;--lf-text-secondary:#737373;--lf-text-tertiary:#a3a3a3;--lf-text-mono:#525252;--lf-link:#60a5fa;--lf-code-bg:#1e1e2e;--lf-code-text:#cdd6f4;--lf-code-line:#6c7086;--lf-badge-bg:#f3f4f6;--lf-badge-text:#374151;--lf-error-bg:#fef2f2;--lf-error-border:#fecaca;--lf-error-text:#991b1b}@media(prefers-color-scheme:dark){:root{--lf-bg:#1e1e2e;--lf-bg-subtle:#262637;--lf-bg-hover:#2a2a3c;--lf-border:#3b3b50;--lf-border-light:#2e2e42;--lf-text:#cdd6f4;--lf-text-secondary:#a6adc8;--lf-text-tertiary:#7f849c;--lf-text-mono:#bac2de;--lf-link:#89b4fa;--lf-code-bg:#181825;--lf-code-text:#cdd6f4;--lf-code-line:#585b70;--lf-badge-bg:#313244;--lf-badge-text:#bac2de;--lf-error-bg:#3b1c1c;--lf-error-border:#5c2626;--lf-error-text:#f87171}}';
+    document.head.appendChild(s);
+  }
+  injectTheme();
+  var isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
   // ── Citation type map from legacy markers ──
   var CITE_TYPE_MAP = {
     documents: 'doc',
@@ -65,10 +75,10 @@
 
     var utils = window.__companionUtils;
     var footer = document.createElement('div');
-    footer.style.cssText = 'margin-top:24px;padding-top:16px;border-top:1px solid #e5e5e5;';
+    footer.style.cssText = 'margin-top:24px;padding-top:16px;border-top:1px solid var(--lf-border);';
 
     var heading = document.createElement('div');
-    heading.style.cssText = 'font-size:12px;font-weight:600;color:#737373;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;';
+    heading.style.cssText = 'font-size:12px;font-weight:600;color:var(--lf-text-secondary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;';
     heading.textContent = 'Sources';
     footer.appendChild(heading);
 
@@ -83,7 +93,7 @@
         var idx = item.index != null ? item.index : item.number;
         var row = document.createElement('div');
         row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:6px 8px;margin:2px 0;border-radius:4px;cursor:pointer;transition:background 0.15s;';
-        row.addEventListener('mouseenter', function () { row.style.background = '#f9fafb'; });
+        row.addEventListener('mouseenter', function () { row.style.background = 'var(--lf-bg-hover)'; });
         row.addEventListener('mouseleave', function () { row.style.background = 'transparent'; });
 
         // Citation number badge
@@ -99,7 +109,7 @@
 
         // Name/title
         var name = document.createElement('span');
-        name.style.cssText = 'color:#171717;font-size:13px;font-weight:500;';
+        name.style.cssText = 'color:var(--lf-text);font-size:13px;font-weight:500;';
         name.textContent = item.title || item.name || item.path || item.tableName || item.table_name || item.connectionName || '';
         row.appendChild(name);
 
@@ -107,7 +117,7 @@
         var secondary = item.filePath || item.file_path || item.dataSourceName || item.data_source_name || item.method || '';
         if (secondary) {
           var sec = document.createElement('span');
-          sec.style.cssText = 'color:#737373;font-size:11px;font-family:monospace;';
+          sec.style.cssText = 'color:var(--lf-text-secondary);font-size:11px;font-family:monospace;';
           sec.textContent = secondary;
           row.appendChild(sec);
         }
@@ -156,16 +166,16 @@
   function renderCodeUnitRow(item, utils) {
     var row = document.createElement('div');
     row.style.cssText = 'display:flex;align-items:center;gap:6px;padding:6px 10px;margin:2px 0;border-radius:6px;cursor:pointer;transition:background 0.15s;';
-    row.addEventListener('mouseenter', function () { row.style.background = '#f9fafb'; });
+    row.addEventListener('mouseenter', function () { row.style.background = 'var(--lf-bg-hover)'; });
     row.addEventListener('mouseleave', function () { row.style.background = 'transparent'; });
 
     // unitType chip
     var unitType = item.unitType || 'CODE';
-    row.appendChild(utils.createBadge(unitType, '#f3e8ff', '#7c3aed'));
+    row.appendChild(utils.createBadge(unitType, isDark ? '#3b1f6e' : '#f3e8ff', isDark ? '#c4b5fd' : '#7c3aed'));
 
     // name
     var nameEl = document.createElement('span');
-    nameEl.style.cssText = 'font-weight:600;color:#171717;font-size:13px;';
+    nameEl.style.cssText = 'font-weight:600;color:var(--lf-text);font-size:13px;';
     nameEl.textContent = item.name || '';
     row.appendChild(nameEl);
 
@@ -173,7 +183,7 @@
     var fp = item.filePath || item.file_path || '';
     if (fp) {
       var pathEl = document.createElement('span');
-      pathEl.style.cssText = 'font-family:monospace;font-size:11px;color:#737373;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
+      pathEl.style.cssText = 'font-family:monospace;font-size:11px;color:var(--lf-text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
       pathEl.textContent = fp;
       row.appendChild(pathEl);
     }
@@ -187,7 +197,7 @@
   function renderApiEndpointRow(item, utils) {
     var row = document.createElement('div');
     row.style.cssText = 'display:flex;align-items:center;gap:6px;padding:6px 10px;margin:2px 0;border-radius:6px;cursor:pointer;transition:background 0.15s;';
-    row.addEventListener('mouseenter', function () { row.style.background = '#f9fafb'; });
+    row.addEventListener('mouseenter', function () { row.style.background = 'var(--lf-bg-hover)'; });
     row.addEventListener('mouseleave', function () { row.style.background = 'transparent'; });
 
     // HTTP method chip
@@ -197,7 +207,7 @@
 
     // path
     var pathEl = document.createElement('span');
-    pathEl.style.cssText = 'font-family:monospace;font-size:13px;color:#171717;font-weight:500;';
+    pathEl.style.cssText = 'font-family:monospace;font-size:13px;color:var(--lf-text);font-weight:500;';
     pathEl.textContent = item.path || '';
     row.appendChild(pathEl);
 
@@ -210,7 +220,7 @@
   function renderTableRow(item, utils) {
     var row = document.createElement('div');
     row.style.cssText = 'display:flex;align-items:center;gap:6px;padding:6px 10px;margin:2px 0;border-radius:6px;cursor:pointer;transition:background 0.15s;';
-    row.addEventListener('mouseenter', function () { row.style.background = '#f9fafb'; });
+    row.addEventListener('mouseenter', function () { row.style.background = 'var(--lf-bg-hover)'; });
     row.addEventListener('mouseleave', function () { row.style.background = 'transparent'; });
 
     // DG chip
@@ -225,7 +235,7 @@
       fullPath = item.name || '';
     }
     var pathEl = document.createElement('span');
-    pathEl.style.cssText = 'font-family:monospace;font-size:13px;color:#171717;font-weight:500;';
+    pathEl.style.cssText = 'font-family:monospace;font-size:13px;color:var(--lf-text);font-weight:500;';
     pathEl.textContent = fullPath;
     row.appendChild(pathEl);
 
@@ -238,7 +248,7 @@
   function renderConceptRow(item, utils) {
     var wrapper = document.createElement('div');
     wrapper.style.cssText = 'padding:6px 10px;margin:2px 0;border-radius:6px;cursor:pointer;transition:background 0.15s;';
-    wrapper.addEventListener('mouseenter', function () { wrapper.style.background = '#f9fafb'; });
+    wrapper.addEventListener('mouseenter', function () { wrapper.style.background = 'var(--lf-bg-hover)'; });
     wrapper.addEventListener('mouseleave', function () { wrapper.style.background = 'transparent'; });
 
     // Top line: chip + name (with parent path)
@@ -249,7 +259,7 @@
     topLine.appendChild(utils.createBadge(kdexColor.label, kdexColor.hex + '15', kdexColor.hex));
 
     var nameEl = document.createElement('span');
-    nameEl.style.cssText = 'font-weight:600;color:#171717;font-size:13px;';
+    nameEl.style.cssText = 'font-weight:600;color:var(--lf-text);font-size:13px;';
     if (item.parentName) {
       nameEl.textContent = item.parentName + ' \u2192 ' + (item.name || '');
     } else {
@@ -262,7 +272,7 @@
     var desc = item.description || '';
     if (desc) {
       var descEl = document.createElement('div');
-      descEl.style.cssText = 'font-size:12px;color:#737373;margin-top:2px;padding-left:2px;';
+      descEl.style.cssText = 'font-size:12px;color:var(--lf-text-secondary);margin-top:2px;padding-left:2px;';
       descEl.textContent = utils.truncate(desc, 80);
       wrapper.appendChild(descEl);
     }
@@ -281,11 +291,11 @@
     var count = (meta && meta.result_count) || items.length;
 
     // Total result count badge
-    container.appendChild(utils.createBadge(count + ' result' + (count !== 1 ? 's' : ''), '#f3f4f6', '#171717'));
+    container.appendChild(utils.createBadge(count + ' result' + (count !== 1 ? 's' : ''), isDark ? '#313244' : '#f3f4f6', isDark ? '#bac2de' : '#171717'));
 
     if (items.length === 0) {
       var empty = document.createElement('div');
-      empty.style.cssText = 'color:#737373;text-align:center;padding:32px;';
+      empty.style.cssText = 'color:var(--lf-text-secondary);text-align:center;padding:32px;';
       empty.textContent = 'No results found';
       container.appendChild(empty);
       return;

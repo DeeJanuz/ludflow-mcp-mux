@@ -6,13 +6,23 @@
 
   window.__renderers = window.__renderers || {};
 
+  function injectTheme() {
+    if (document.getElementById('lf-theme')) return;
+    var s = document.createElement('style');
+    s.id = 'lf-theme';
+    s.textContent = ':root{--lf-bg:#ffffff;--lf-bg-subtle:#f9fafb;--lf-bg-hover:#f9fafb;--lf-border:#e5e5e5;--lf-border-light:#f3f4f6;--lf-text:#171717;--lf-text-secondary:#737373;--lf-text-tertiary:#a3a3a3;--lf-text-mono:#525252;--lf-link:#60a5fa;--lf-code-bg:#1e1e2e;--lf-code-text:#cdd6f4;--lf-code-line:#6c7086;--lf-badge-bg:#f3f4f6;--lf-badge-text:#374151;--lf-error-bg:#fef2f2;--lf-error-border:#fecaca;--lf-error-text:#991b1b}@media(prefers-color-scheme:dark){:root{--lf-bg:#1e1e2e;--lf-bg-subtle:#262637;--lf-bg-hover:#2a2a3c;--lf-border:#3b3b50;--lf-border-light:#2e2e42;--lf-text:#cdd6f4;--lf-text-secondary:#a6adc8;--lf-text-tertiary:#7f849c;--lf-text-mono:#bac2de;--lf-link:#89b4fa;--lf-code-bg:#181825;--lf-code-text:#cdd6f4;--lf-code-line:#585b70;--lf-badge-bg:#313244;--lf-badge-text:#bac2de;--lf-error-bg:#3b1c1c;--lf-error-border:#5c2626;--lf-error-text:#f87171}}';
+    document.head.appendChild(s);
+  }
+  injectTheme();
+  var isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
   var STYLES = {
-    summaryBar: 'display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:8px 12px;background:#f9fafb;border-radius:6px;',
-    fileCard: 'margin:8px 0;background:#ffffff;border:1px solid #e5e5e5;border-radius:8px;overflow:hidden;',
-    fileHeader: 'display:flex;align-items:center;gap:8px;padding:10px 16px;background:#f9fafb;border-bottom:1px solid #e5e5e5;flex-wrap:wrap;',
-    monoPath: 'font-family:monospace;font-size:13px;font-weight:600;color:#171717;',
-    codeBlock: 'margin:0;padding:16px;background:#1e1e2e;color:#cdd6f4;font-family:monospace;font-size:12px;line-height:1.6;overflow-x:auto;',
-    lineNumber: 'color:#6c7086;min-width:40px;display:inline-block;text-align:right;margin-right:12px;user-select:none;flex-shrink:0;',
+    summaryBar: 'display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:8px 12px;background:var(--lf-bg-subtle);border-radius:6px;',
+    fileCard: 'margin:8px 0;background:var(--lf-bg);border:1px solid var(--lf-border);border-radius:8px;overflow:hidden;',
+    fileHeader: 'display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--lf-bg-subtle);border-bottom:1px solid var(--lf-border);flex-wrap:wrap;',
+    monoPath: 'font-family:monospace;font-size:13px;font-weight:600;color:var(--lf-text);',
+    codeBlock: 'margin:0;padding:16px;background:var(--lf-code-bg);color:var(--lf-code-text);font-family:monospace;font-size:12px;line-height:1.6;overflow-x:auto;',
+    lineNumber: 'color:var(--lf-code-line);min-width:40px;display:inline-block;text-align:right;margin-right:12px;user-select:none;flex-shrink:0;',
   };
 
   /**
@@ -43,12 +53,12 @@
     // Summary bar
     var summary = document.createElement('div');
     summary.style.cssText = STYLES.summaryBar;
-    summary.appendChild(utils.createBadge(files.length + ' file' + (files.length !== 1 ? 's' : ''), '#f3f4f6', '#171717'));
+    summary.appendChild(utils.createBadge(files.length + ' file' + (files.length !== 1 ? 's' : ''), isDark ? '#313244' : '#f3f4f6', isDark ? '#cdd6f4' : '#171717'));
     container.appendChild(summary);
 
     if (files.length === 0) {
       var empty = document.createElement('div');
-      empty.style.cssText = 'color:#737373;text-align:center;padding:32px;';
+      empty.style.cssText = 'color:var(--lf-text-secondary);text-align:center;padding:32px;';
       empty.textContent = 'No files returned';
       container.appendChild(empty);
       return;
@@ -63,7 +73,7 @@
     // Handle null/not-found entries
     if (!file) {
       var errorCard = document.createElement('div');
-      errorCard.style.cssText = 'margin:8px 0;padding:12px 16px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;color:#991b1b;font-size:13px;';
+      errorCard.style.cssText = 'margin:8px 0;padding:12px 16px;background:var(--lf-error-bg);border:1px solid var(--lf-error-border);border-radius:8px;color:var(--lf-error-text);font-size:13px;';
       errorCard.textContent = 'File not found';
       return errorCard;
     }
@@ -83,7 +93,7 @@
     // Size badge
     if (file.size != null) {
       var sizeStr = file.size >= 1024 ? (file.size / 1024).toFixed(1) + ' KB' : file.size + ' B';
-      header.appendChild(utils.createBadge(sizeStr, '#f3f4f6', '#525252'));
+      header.appendChild(utils.createBadge(sizeStr, isDark ? '#313244' : '#f3f4f6', isDark ? '#bac2de' : '#525252'));
     }
 
     // Line range badge
@@ -91,14 +101,14 @@
     var totalLines = file.totalLines || file.total_lines;
     if (returnedLines && totalLines) {
       var rangeText = 'lines ' + returnedLines.start + '-' + returnedLines.end + ' of ' + totalLines;
-      header.appendChild(utils.createBadge(rangeText, '#dbeafe', '#1e40af'));
+      header.appendChild(utils.createBadge(rangeText, isDark ? '#1e3a5f' : '#dbeafe', isDark ? '#93c5fd' : '#1e40af'));
     } else if (totalLines) {
-      header.appendChild(utils.createBadge(totalLines + ' lines', '#dbeafe', '#1e40af'));
+      header.appendChild(utils.createBadge(totalLines + ' lines', isDark ? '#1e3a5f' : '#dbeafe', isDark ? '#93c5fd' : '#1e40af'));
     }
 
     // Truncated warning
     if (file.truncated) {
-      header.appendChild(utils.createBadge('TRUNCATED', '#fef9c3', '#854d0e'));
+      header.appendChild(utils.createBadge('TRUNCATED', isDark ? '#422006' : '#fef9c3', isDark ? '#fde68a' : '#854d0e'));
     }
 
     card.appendChild(header);
@@ -124,7 +134,7 @@
       card.appendChild(codeWrapper);
     } else {
       var noContent = document.createElement('div');
-      noContent.style.cssText = 'padding:16px;color:#737373;font-size:13px;';
+      noContent.style.cssText = 'padding:16px;color:var(--lf-text-secondary);font-size:13px;';
       noContent.textContent = 'No content available';
       card.appendChild(noContent);
     }
