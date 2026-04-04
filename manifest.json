@@ -1,7 +1,7 @@
 {
   "name": "ludflow",
-  "version": "0.3.0",
-  "download_url": "https://github.com/DeeJanuz/ludflow-mcpviews/releases/download/v0.3.0/ludflow-plugin.zip",
+  "version": "0.4.0",
+  "download_url": "https://github.com/DeeJanuz/ludflow-mcpviews/releases/download/v0.4.0/ludflow-plugin.zip",
   "description": "Ludflow MCP Views plugin for code intelligence and knowledge management",
   "registry_index": {
     "summary": "Code intelligence, data governance, and knowledge management tools for the Ludflow platform",
@@ -56,10 +56,8 @@
     "renderer_names": [
       "search_results",
       "code_units",
-      "module_overview",
       "dependencies",
       "file_content",
-      "analysis_stats",
       "column_context"
     ]
   },
@@ -75,8 +73,8 @@
     "get_data_lake_schema": "structured_data",
     "get_dependencies": "dependencies",
     "get_file_content": "file_content",
-    "get_module_overview": "module_overview",
-    "get_analysis_stats": "analysis_stats",
+    "get_module_overview": "rich_content",
+    "get_analysis_stats": "rich_content",
     "get_business_concepts": "structured_data",
     "manage_knowledge_entries": "structured_data",
     "get_column_context": "column_context"
@@ -141,22 +139,22 @@
       "data_hint": "{ files?: [{ path: string, content: string, size?: number, totalLines?: number, returnedLines?: { start: number, end: number }, truncated?: boolean }], file?: { path: string, content: string, size?: number, totalLines?: number, returnedLines?: { start: number, end: number }, truncated?: boolean } }"
     },
     {
-      "name": "module_overview",
-      "description": "Displays a module directory overview with repository badge, summary metrics (files, exports, internal/external deps), collapsible file tree, exports with type badges and signatures, and dependency listings.",
+      "name": "rich_content",
+      "description": "Markdown display for module overview",
       "scope": "tool",
       "tools": [
         "get_module_overview"
       ],
-      "data_hint": "{ directory: string, repository?: { name: string, fullName?: string }, summary?: { total_files: number, total_exports: number, total_internal_deps: number, total_external_deps: number }, file_tree?: [{ path: string, size?: number }], exports?: [{ name: string, type: string, file?: string, signature?: string }], internal_dependencies?: [{ source: string, target: string, imports?: string[] }], external_dependencies?: [{ source: string, target: string }] }"
+      "rule": "Transform get_module_overview output into rich_content markdown. Title: the directory path (monospace). If repository exists, note it. Summary line: N files, N exports, N internal deps, N external deps. Then sections: '## File Tree' as a code block listing paths with sizes. '## Exports' as a markdown table: | Name | Type | File | Signature |. '## Internal Dependencies' as rows: `source` \u2192 `target` (imported names). '## External Dependencies' as rows: `source` \u2192 `target`."
     },
     {
-      "name": "analysis_stats",
-      "description": "Shows analysis overview with metric cards (repositories, code units, data sources, tables, business concepts) and per-repository detail cards with language, unit count, and last analyzed date.",
+      "name": "rich_content",
+      "description": "Markdown display for analysis stats",
       "scope": "tool",
       "tools": [
         "get_analysis_stats"
       ],
-      "data_hint": "{ analyzed_repositories: [{ name: string, fullName?: string, language?: string, codeUnitCount?: number, lastAnalyzedAt?: string }], totals: { repositories: number, codeUnits?: number, dataSources?: number, tables?: number, businessConcepts?: number }, unanalyzed_count?: number, unanalyzed_names?: string[] }"
+      "rule": "Transform get_analysis_stats output into rich_content markdown. Start with a summary line: '**N repositories** analyzed'. Then a metrics row as a markdown table: | Repositories | Code Units | Data Sources | Tables | Business Concepts | with totals as the single data row. Then an '## Analyzed Repositories' section with each repo as: **repo.name** (`language`) \u2014 N code units \u2014 last analyzed: date. If repo.fullName exists, show it in monospace below. If unanalyzed repos exist, add '## Unanalyzed' section listing their names."
     },
     {
       "name": "structured_data",
