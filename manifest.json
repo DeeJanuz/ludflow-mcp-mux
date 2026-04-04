@@ -123,6 +123,14 @@
       "data_hint": "{ column: { name: string, originalDataType?: string, nullable?: boolean, isPrimaryKey?: boolean, description?: string }, table: { name: string, dataSource?: { name: string } }, businessConcepts?: [{ name: string, description?: string, category?: string }], documentLinks?: [{ document: { id?: string, title: string } }], crossColumnLinks?: [{ direction?: 'outgoing' | 'incoming', linkedColumn: { name: string, table?: { name: string } } }], metadataColumns?: [{ name: string, dataType?: string, isRequired?: boolean, isSystemColumn?: boolean }] }"
     }
   ],
+  "prompt_definitions": [
+    {
+      "name": "knowledge_dex_onboard",
+      "description": "Guided onboarding to bootstrap your Knowledge Dex with business concepts, entities, and attributes. Interviews you about your domain, then creates entries with visual preview and approval.",
+      "arguments": [],
+      "source": "prompts/knowledge-dex-onboard.md"
+    }
+  ],
   "mcp": {
     "url": "https://app.ludflow.com/api/mcp",
     "auth": {

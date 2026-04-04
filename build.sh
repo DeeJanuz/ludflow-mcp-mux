@@ -12,6 +12,6 @@ rm -rf "${RELEASE_DIR}"
 mkdir -p "${RELEASE_DIR}"
 
 # Create ZIP with manifest and renderers
-zip -r "${RELEASE_DIR}/${ZIP_NAME}" manifest.json renderers/
+zip -r "${RELEASE_DIR}/${ZIP_NAME}" manifest.json renderers/ prompts/
 
 echo "Built ${RELEASE_DIR}/${ZIP_NAME} ($(du -h "${RELEASE_DIR}/${ZIP_NAME}" | cut -f1))"
