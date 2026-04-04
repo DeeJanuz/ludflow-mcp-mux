@@ -5,30 +5,63 @@
   "description": "Ludflow MCP Views plugin for code intelligence and knowledge management",
   "registry_index": {
     "summary": "Code intelligence, data governance, and knowledge management tools for the Ludflow platform",
-    "tags": ["code-analysis", "search", "data-governance", "knowledge-management"],
+    "tags": [
+      "code-analysis",
+      "search",
+      "data-governance",
+      "knowledge-management"
+    ],
     "tool_groups": [
       {
         "name": "Search",
         "hint": "Full-text and vector search across codebase, docs, and data governance",
-        "tools": ["search_codebase", "vector_search"]
+        "tools": [
+          "search_codebase",
+          "vector_search"
+        ]
       },
       {
         "name": "Code Analysis",
         "hint": "Inspect code units, modules, dependencies, and file contents",
-        "tools": ["get_code_units", "get_module_overview", "get_dependencies", "get_file_content", "get_analysis_stats"]
+        "tools": [
+          "get_code_units",
+          "get_module_overview",
+          "get_dependencies",
+          "get_file_content",
+          "get_analysis_stats"
+        ]
       },
       {
         "name": "Data Governance",
         "hint": "Explore and draft changes to data schemas, columns, and data lake",
-        "tools": ["get_data_schema", "get_data_lake_schema", "get_column_context", "manage_data_draft"]
+        "tools": [
+          "get_data_schema",
+          "get_data_lake_schema",
+          "get_column_context",
+          "manage_data_draft"
+        ]
       },
       {
         "name": "Knowledge & Docs",
         "hint": "Manage business concepts, knowledge entries, and documents",
-        "tools": ["get_business_concepts", "manage_knowledge_entries", "get_document", "write_document", "list_documents"]
+        "tools": [
+          "get_business_concepts",
+          "manage_knowledge_entries",
+          "get_document",
+          "write_document",
+          "list_documents"
+        ]
       }
     ],
-    "renderer_names": ["search_results", "code_units", "module_overview", "dependencies", "file_content", "analysis_stats", "column_context"]
+    "renderer_names": [
+      "search_results",
+      "code_units",
+      "module_overview",
+      "dependencies",
+      "file_content",
+      "analysis_stats",
+      "column_context"
+    ]
   },
   "renderers": {
     "search_codebase": "search_results",
@@ -53,21 +86,29 @@
       "name": "search_results",
       "description": "Displays codebase search results grouped by type (code units, API endpoints, tables, concepts) with citation badges and click-to-expand panels. Also renders agent answers with inline citations when an 'answer' field is present.",
       "scope": "tool",
-      "tools": ["search_codebase", "vector_search"],
+      "tools": [
+        "search_codebase",
+        "vector_search"
+      ],
       "data_hint": "{ results: [{ type: 'code_unit' | 'api_endpoint' | 'table' | 'concept', name: string, filePath?: string, unitType?: string, method?: string, path?: string, dataSourceName?: string, parentName?: string, description?: string }], result_count?: number } | { answer: string, citations?: { documents?: [{ index: number, id: string, title: string, content?: string, status?: string, folder_name?: string }], code?: [{ index: number, id: string, name: string, filePath: string, unitType: string, lineStart?: number, lineEnd?: number, source?: string, complexity?: number, patterns?: string[] }], dataGovernance?: [{ index: number, id: string, tableName: string, dataSourceName: string, columns?: object[] }], api?: [{ index: number, id: string, method: string, path: string, description?: string, repositoryName?: string }], knowledgeDex?: [{ index: number, id: string, name: string, description?: string, scope?: string }], dataLake?: [{ index: number, id: string, connectionName: string, tablePath?: string }] } }"
     },
     {
       "name": "code_units",
       "description": "Renders code units (functions, classes, interfaces, types) with syntax-highlighted source, type/exported/complexity badges, file paths with line ranges, patterns, and collapsible references.",
       "scope": "tool",
-      "tools": ["get_code_units"],
+      "tools": [
+        "get_code_units"
+      ],
       "data_hint": "[{ name: string, unit_type: string, file_path?: string, line_start?: number, line_end?: number, source?: string, exported?: boolean, complexity?: number, patterns?: (string | { name: string })[], references?: (string | { file_path?: string, name?: string })[] }]"
     },
     {
       "name": "structured_data",
       "description": "Tabular data with hierarchical rows, change tracking, sort/filter, and review mode",
       "scope": "tool",
-      "tools": ["get_data_schema", "get_data_lake_schema"],
+      "tools": [
+        "get_data_schema",
+        "get_data_lake_schema"
+      ],
       "data_hint": "{ title?: string, tables: [{ id: string, name: string, columns: [{ id: string, name: string }], rows: [{ id: string, cells: { [columnId]: { value: string } } }] }] }",
       "rule": "Transform each database table into a structured_data table. Use columns: name, data_type, pk, nullable, description. Each database column becomes a row. Boolean fields (is_primary_key, is_nullable) become 'Yes' or empty string. Metadata tags can be appended to description. Push with push_content for read-only display."
     },
@@ -75,7 +116,9 @@
       "name": "structured_data",
       "description": "Tabular data with hierarchical rows, change tracking, sort/filter, and review mode",
       "scope": "tool",
-      "tools": ["manage_data_draft"],
+      "tools": [
+        "manage_data_draft"
+      ],
       "data_hint": "{ title?: string, tables: [{ id: string, name: string, columns: [{ id: string, name: string, change?: 'add'|'delete' }], rows: [{ id: string, cells: { [columnId]: { value: string, change?: 'add'|'delete'|'update' } } }] }] }",
       "rule": "Transform draft changes into structured_data. Group changes by table_name into separate tables. Rows = database columns with changes. Columns = metadata field names. Set cell change markers: 'update' for modified values, 'add' for new values, 'delete' for removals. Push with push_review for accept/reject UI."
     },
@@ -83,35 +126,46 @@
       "name": "dependencies",
       "description": "Shows import/export dependencies grouped by source file, with target file paths, import type badges (NAMED, DEFAULT, PACKAGE, etc.), and imported name chips.",
       "scope": "tool",
-      "tools": ["get_dependencies"],
+      "tools": [
+        "get_dependencies"
+      ],
       "data_hint": "[{ sourceFile: string, targetFile: string, importType?: string, importedNames?: string[] }]"
     },
     {
       "name": "file_content",
       "description": "Renders file content with syntax-highlighted code, line numbers, file size, line range indicators, and truncation warnings. Supports single or multiple files.",
       "scope": "tool",
-      "tools": ["get_file_content"],
+      "tools": [
+        "get_file_content"
+      ],
       "data_hint": "{ files?: [{ path: string, content: string, size?: number, totalLines?: number, returnedLines?: { start: number, end: number }, truncated?: boolean }], file?: { path: string, content: string, size?: number, totalLines?: number, returnedLines?: { start: number, end: number }, truncated?: boolean } }"
     },
     {
       "name": "module_overview",
       "description": "Displays a module directory overview with repository badge, summary metrics (files, exports, internal/external deps), collapsible file tree, exports with type badges and signatures, and dependency listings.",
       "scope": "tool",
-      "tools": ["get_module_overview"],
+      "tools": [
+        "get_module_overview"
+      ],
       "data_hint": "{ directory: string, repository?: { name: string, fullName?: string }, summary?: { total_files: number, total_exports: number, total_internal_deps: number, total_external_deps: number }, file_tree?: [{ path: string, size?: number }], exports?: [{ name: string, type: string, file?: string, signature?: string }], internal_dependencies?: [{ source: string, target: string, imports?: string[] }], external_dependencies?: [{ source: string, target: string }] }"
     },
     {
       "name": "analysis_stats",
       "description": "Shows analysis overview with metric cards (repositories, code units, data sources, tables, business concepts) and per-repository detail cards with language, unit count, and last analyzed date.",
       "scope": "tool",
-      "tools": ["get_analysis_stats"],
+      "tools": [
+        "get_analysis_stats"
+      ],
       "data_hint": "{ analyzed_repositories: [{ name: string, fullName?: string, language?: string, codeUnitCount?: number, lastAnalyzedAt?: string }], totals: { repositories: number, codeUnits?: number, dataSources?: number, tables?: number, businessConcepts?: number }, unanalyzed_count?: number, unanalyzed_names?: string[] }"
     },
     {
       "name": "structured_data",
       "description": "Tabular data with hierarchical rows, change tracking, sort/filter, and review mode",
       "scope": "tool",
-      "tools": ["get_business_concepts", "manage_knowledge_entries"],
+      "tools": [
+        "get_business_concepts",
+        "manage_knowledge_entries"
+      ],
       "data_hint": "{ title?: string, tables: [{ id: string, name: string, columns: [{ id: string, name: string }], rows: [{ id: string, cells: { [columnId]: { value: string, change?: 'add'|'delete'|'update' } }, children?: [...] }] }] }",
       "rule": "Transform entries into structured_data with one table. Columns: name, description, mode, mappings. Root entries become rows; attributes become children (hierarchical rows). For mutations (create/update), set change: 'add' for new entries, 'update' for modified, null for reference. Mappings cell = comma-joined 'dataSource.table.column' strings. For read-only listing use push_content; for mutation review use push_review."
     },
@@ -119,7 +173,9 @@
       "name": "column_context",
       "description": "Displays deep column context with breadcrumb navigation (data source > table > column), column metadata badges (type, nullable, PK), description, linked business concepts, document links, cross-column relationships, and metadata column details.",
       "scope": "tool",
-      "tools": ["get_column_context"],
+      "tools": [
+        "get_column_context"
+      ],
       "data_hint": "{ column: { name: string, originalDataType?: string, nullable?: boolean, isPrimaryKey?: boolean, description?: string }, table: { name: string, dataSource?: { name: string } }, businessConcepts?: [{ name: string, description?: string, category?: string }], documentLinks?: [{ document: { id?: string, title: string } }], crossColumnLinks?: [{ direction?: 'outgoing' | 'incoming', linkedColumn: { name: string, table?: { name: string } } }], metadataColumns?: [{ name: string, dataType?: string, isRequired?: boolean, isSystemColumn?: boolean }] }"
     }
   ],
@@ -138,7 +194,9 @@
       "client_id": "fc99d041-1923-416c-8173-a4c02ae9b3a7",
       "auth_url": "https://app.ludflow.com/oauth/authorize",
       "token_url": "https://app.ludflow.com/oauth/token",
-      "scopes": ["mcp:tools"]
+      "scopes": [
+        "mcp:tools"
+      ]
     },
     "tool_prefix": "ludflow__"
   }
