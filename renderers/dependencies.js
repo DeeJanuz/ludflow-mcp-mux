@@ -6,15 +6,7 @@
 
   window.__renderers = window.__renderers || {};
 
-  function injectTheme() {
-    if (document.getElementById('lf-theme')) return;
-    var s = document.createElement('style');
-    s.id = 'lf-theme';
-    s.textContent = ':root{--lf-bg:#ffffff;--lf-bg-subtle:#f9fafb;--lf-bg-hover:#f9fafb;--lf-border:#e5e5e5;--lf-border-light:#f3f4f6;--lf-text:#171717;--lf-text-secondary:#737373;--lf-text-tertiary:#a3a3a3;--lf-text-mono:#525252;--lf-link:#60a5fa;--lf-code-bg:#1e1e2e;--lf-code-text:#cdd6f4;--lf-code-line:#6c7086;--lf-badge-bg:#f3f4f6;--lf-badge-text:#374151;--lf-error-bg:#fef2f2;--lf-error-border:#fecaca;--lf-error-text:#991b1b}@media(prefers-color-scheme:dark){:root{--lf-bg:#1e1e2e;--lf-bg-subtle:#262637;--lf-bg-hover:#2a2a3c;--lf-border:#3b3b50;--lf-border-light:#2e2e42;--lf-text:#cdd6f4;--lf-text-secondary:#a6adc8;--lf-text-tertiary:#7f849c;--lf-text-mono:#bac2de;--lf-link:#89b4fa;--lf-code-bg:#181825;--lf-code-text:#cdd6f4;--lf-code-line:#585b70;--lf-badge-bg:#313244;--lf-badge-text:#bac2de;--lf-error-bg:#3b1c1c;--lf-error-border:#5c2626;--lf-error-text:#f87171}}';
-    document.head.appendChild(s);
-  }
-  injectTheme();
-  var isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var isDark = (window.__companionUtils && window.__companionUtils.isDark) || false;
 
   var IMPORT_TYPE_COLORS_LIGHT = {
     NAMED: { bg: '#dbeafe', text: '#1e40af' },
@@ -54,6 +46,29 @@
    */
   window.__renderers.dependencies = function renderDependencies(container, data, meta, toolArgs, reviewRequired, onDecision) {
     container.innerHTML = '';
+
+    // Proxy fetch mode: minimal params → lazy load
+    if (data && data.id && !data.data && !Array.isArray(data)) {
+      var _utils = window.__companionUtils;
+      if (_utils && _utils.companionFetch) {
+        var statusEl = document.createElement('div');
+        statusEl.style.cssText = 'padding: 16px; color: var(--text-secondary); text-align: center;';
+        statusEl.textContent = 'Loading...';
+        container.appendChild(statusEl);
+        _utils.companionFetch('get_dependencies', { id: data.id })
+          .then(function (result) {
+            container.removeChild(statusEl);
+            if (result && result.data) {
+              renderDependencies(container, result.data, meta, toolArgs, reviewRequired, onDecision);
+            }
+          })
+          .catch(function (err) {
+            statusEl.textContent = 'Failed to load: ' + err.message;
+            statusEl.style.color = 'var(--color-error)';
+          });
+        return;
+      }
+    }
 
     var utils = window.__companionUtils;
     var items = (data && data.data) || data || [];

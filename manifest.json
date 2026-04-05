@@ -1,7 +1,7 @@
 {
   "name": "ludflow",
-  "version": "0.4.0",
-  "download_url": "https://github.com/DeeJanuz/ludflow-mcpviews/releases/download/v0.4.0/ludflow-plugin.zip",
+  "version": "0.5.0",
+  "download_url": "https://github.com/DeeJanuz/ludflow-mcpviews/releases/download/v0.5.0/ludflow-plugin.zip",
   "description": "Ludflow MCP Views plugin for code intelligence and knowledge management",
   "registry_index": {
     "summary": "Code intelligence, data governance, and knowledge management tools for the Ludflow platform",
@@ -10,6 +10,12 @@
       "search",
       "data-governance",
       "knowledge-management"
+    ],
+    "plugin_rules": [
+      "When working on a Decidr decision or project and discovery produces findings worth preserving (architecture analysis, design specs, prerequisite research), propose creating a Ludflow document using write_document. Only propose documents when there is a relevant Decidr entity to attach to \u2014 do not create documents speculatively.",
+      "If discovery reveals a prerequisite to the current decision, evaluate whether it warrants a new Decidr decision: create a new decision if the prerequisite touches a different module/scope OR affects other projects/decisions beyond the current one. Otherwise, bundle it into the current decision. When creating a new prerequisite decision, create a Ludflow document capturing the rationale and link it.",
+      "When creating or updating a Ludflow document, proactively search Decidr for related entities scoped to the current initiative. Propose links via link_document \u2014 never auto-link without user confirmation. If matches exist in other initiatives, mention them but do not auto-link across initiatives.",
+      "When creating documents, search the Knowledge Dex (get_business_concepts) for relevant business concepts and use consistent terminology. When discovering unfamiliar domain terms during work, propose adding them via manage_knowledge_entries."
     ],
     "tool_groups": [
       {
@@ -53,51 +59,45 @@
         ]
       }
     ],
-    "renderer_names": [
-      "search_results",
-      "code_units",
-      "dependencies",
-      "file_content",
-      "column_context"
-    ]
+    "renderer_names": []
   },
   "renderers": {
-    "search_codebase": "search_results",
-    "vector_search": "search_results",
-    "get_code_units": "code_units",
-    "get_document": "document_preview",
-    "write_document": "document_preview",
-    "list_documents": "document_preview",
+    "search_codebase": "rich_content",
+    "vector_search": "rich_content",
+    "get_code_units": "rich_content",
+    "get_document": "rich_content",
+    "write_document": "rich_content",
+    "list_documents": "rich_content",
     "get_data_schema": "structured_data",
     "manage_data_draft": "structured_data",
     "get_data_lake_schema": "structured_data",
-    "get_dependencies": "dependencies",
-    "get_file_content": "file_content",
+    "get_dependencies": "rich_content",
+    "get_file_content": "rich_content",
     "get_module_overview": "rich_content",
     "get_analysis_stats": "rich_content",
     "get_business_concepts": "structured_data",
     "manage_knowledge_entries": "structured_data",
-    "get_column_context": "column_context"
+    "get_column_context": "rich_content"
   },
   "renderer_definitions": [
     {
-      "name": "search_results",
-      "description": "Displays codebase search results grouped by type (code units, API endpoints, tables, concepts) with citation badges and click-to-expand panels. Also renders agent answers with inline citations when an 'answer' field is present.",
+      "name": "rich_content",
+      "description": "Markdown display with plugin citations for search results",
       "scope": "tool",
       "tools": [
         "search_codebase",
         "vector_search"
       ],
-      "data_hint": "{ results: [{ type: 'code_unit' | 'api_endpoint' | 'table' | 'concept', name: string, filePath?: string, unitType?: string, method?: string, path?: string, dataSourceName?: string, parentName?: string, description?: string }], result_count?: number } | { answer: string, citations?: { documents?: [{ index: number, id: string, title: string, content?: string, status?: string, folder_name?: string }], code?: [{ index: number, id: string, name: string, filePath: string, unitType: string, lineStart?: number, lineEnd?: number, source?: string, complexity?: number, patterns?: string[] }], dataGovernance?: [{ index: number, id: string, tableName: string, dataSourceName: string, columns?: object[] }], api?: [{ index: number, id: string, method: string, path: string, description?: string, repositoryName?: string }], knowledgeDex?: [{ index: number, id: string, name: string, description?: string, scope?: string }], dataLake?: [{ index: number, id: string, connectionName: string, tablePath?: string }] } }"
+      "rule": "Transform search results into rich_content markdown. If an 'answer' field is present, use it as the body with inline citations. Otherwise, title: 'Search Results (N)'. Body: Group results by type. For each result, show name, brief description, and a plugin citation link [n](cite:plugin:ludflow:TYPE:ID) so users can click to see full detail in a slideout. Include citation objects in data.citations.plugin array."
     },
     {
-      "name": "code_units",
-      "description": "Renders code units (functions, classes, interfaces, types) with syntax-highlighted source, type/exported/complexity badges, file paths with line ranges, patterns, and collapsible references.",
+      "name": "rich_content",
+      "description": "Markdown display with plugin citations for code units",
       "scope": "tool",
       "tools": [
         "get_code_units"
       ],
-      "data_hint": "[{ name: string, unit_type: string, file_path?: string, line_start?: number, line_end?: number, source?: string, exported?: boolean, complexity?: number, patterns?: (string | { name: string })[], references?: (string | { file_path?: string, name?: string })[] }]"
+      "rule": "Transform code units into rich_content markdown. Title: 'Code Units'. Body: For each unit, create a heading with the name, badge the unit_type, show file_path:line_start-line_end. Include source in a fenced code block with the appropriate language. Add plugin citations: [n](cite:plugin:ludflow:code_unit:unitId) for each unit so users can click to see full detail in a slideout."
     },
     {
       "name": "structured_data",
@@ -121,22 +121,22 @@
       "rule": "Transform draft changes into structured_data. Group changes by table_name into separate tables. Rows = database columns with changes. Columns = metadata field names. Set cell change markers: 'update' for modified values, 'add' for new values, 'delete' for removals. Push with push_review for accept/reject UI."
     },
     {
-      "name": "dependencies",
-      "description": "Shows import/export dependencies grouped by source file, with target file paths, import type badges (NAMED, DEFAULT, PACKAGE, etc.), and imported name chips.",
+      "name": "rich_content",
+      "description": "Markdown display with plugin citations for dependencies",
       "scope": "tool",
       "tools": [
         "get_dependencies"
       ],
-      "data_hint": "[{ sourceFile: string, targetFile: string, importType?: string, importedNames?: string[] }]"
+      "rule": "Transform dependencies into rich_content markdown. Title: 'Dependencies'. Body: Group by source file. For each dependency, show source \u2192 target with import type and imported names. Add plugin citations for clickable source files."
     },
     {
-      "name": "file_content",
-      "description": "Renders file content with syntax-highlighted code, line numbers, file size, line range indicators, and truncation warnings. Supports single or multiple files.",
+      "name": "rich_content",
+      "description": "Markdown display with plugin citations for file content",
       "scope": "tool",
       "tools": [
         "get_file_content"
       ],
-      "data_hint": "{ files?: [{ path: string, content: string, size?: number, totalLines?: number, returnedLines?: { start: number, end: number }, truncated?: boolean }], file?: { path: string, content: string, size?: number, totalLines?: number, returnedLines?: { start: number, end: number }, truncated?: boolean } }"
+      "rule": "Transform file content into rich_content markdown. Title: the file path. Body: Show file info (size, lines) then the content in a fenced code block with appropriate language detection from the file extension."
     },
     {
       "name": "rich_content",
@@ -168,13 +168,13 @@
       "rule": "Transform entries into structured_data with one table. Columns: name, description, mode, mappings. Root entries become rows; attributes become children (hierarchical rows). For mutations (create/update), set change: 'add' for new entries, 'update' for modified, null for reference. Mappings cell = comma-joined 'dataSource.table.column' strings. For read-only listing use push_content; for mutation review use push_review."
     },
     {
-      "name": "column_context",
-      "description": "Displays deep column context with breadcrumb navigation (data source > table > column), column metadata badges (type, nullable, PK), description, linked business concepts, document links, cross-column relationships, and metadata column details.",
+      "name": "rich_content",
+      "description": "Markdown display with plugin citations for column context",
       "scope": "tool",
       "tools": [
         "get_column_context"
       ],
-      "data_hint": "{ column: { name: string, originalDataType?: string, nullable?: boolean, isPrimaryKey?: boolean, description?: string }, table: { name: string, dataSource?: { name: string } }, businessConcepts?: [{ name: string, description?: string, category?: string }], documentLinks?: [{ document: { id?: string, title: string } }], crossColumnLinks?: [{ direction?: 'outgoing' | 'incoming', linkedColumn: { name: string, table?: { name: string } } }], metadataColumns?: [{ name: string, dataType?: string, isRequired?: boolean, isSystemColumn?: boolean }] }"
+      "rule": "Transform column context into rich_content markdown. Title: 'Column: dataSource.table.column'. Body: Show column metadata (type, nullable, PK), description, linked business concepts, document links, and cross-column relationships. Add plugin citations for linked entities."
     }
   ],
   "prompt_definitions": [
