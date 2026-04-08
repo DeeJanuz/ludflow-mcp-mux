@@ -1,7 +1,7 @@
 {
   "name": "ludflow",
-  "version": "0.5.0",
-  "download_url": "https://github.com/DeeJanuz/ludflow-mcpviews/releases/download/v0.5.0/ludflow-plugin.zip",
+  "version": "0.5.1",
+  "download_url": "https://github.com/DeeJanuz/ludflow-mcpviews/releases/download/v0.5.1/ludflow-plugin.zip",
   "description": "Ludflow MCP Views plugin for code intelligence and knowledge management",
   "registry_index": {
     "summary": "Code intelligence, data governance, and knowledge management tools for the Ludflow platform",
@@ -57,9 +57,23 @@
           "write_document",
           "list_documents"
         ]
+      },
+      {
+        "name": "Organization",
+        "hint": "Discover organizations and MCPViews auth status before cross-org work",
+        "tools": [
+          "list_organizations"
+        ]
       }
     ],
     "renderer_names": []
+  },
+  "plugin_rules": [
+    "Ludflow is a multi-org OAuth plugin. Before working in a different organization, call list_organizations to discover available orgs and token status. For follow-up Ludflow tool calls in that org, include organization_id.",
+    "If list_organizations shows has_mcpviews_token as false for the target org, call start_plugin_auth with plugin_name 'ludflow' and that organization_id before retrying."
+  ],
+  "tool_rules": {
+    "list_organizations": "Use to discover which organizations the user belongs to and whether MCPViews already has an org-scoped token. Results are enriched with has_mcpviews_token. When switching to another org, include organization_id in subsequent Ludflow tool calls. If the target org has no token, call start_plugin_auth with that organization_id."
   },
   "renderers": {
     "search_codebase": "rich_content",
@@ -77,9 +91,19 @@
     "get_analysis_stats": "rich_content",
     "get_business_concepts": "structured_data",
     "manage_knowledge_entries": "structured_data",
-    "get_column_context": "rich_content"
+    "get_column_context": "rich_content",
+    "list_organizations": "rich_content"
   },
   "renderer_definitions": [
+    {
+      "name": "rich_content",
+      "description": "Markdown display for Ludflow organization discovery and auth status",
+      "scope": "tool",
+      "tools": [
+        "list_organizations"
+      ],
+      "rule": "Transform list_organizations output into rich_content markdown. Title: 'Ludflow Organizations'. Body: For each org show the name, slug, role, whether it is the current token's org, and whether has_mcpviews_token is true. If has_mcpviews_token is false, tell the user to authenticate that org before switching."
+    },
     {
       "name": "rich_content",
       "description": "Markdown display with plugin citations for search results",

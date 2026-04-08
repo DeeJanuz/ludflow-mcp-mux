@@ -1,3 +1,10 @@
+# v0.5.1
+
+## Multi-Org Auth
+
+- **fix**: Add active top-level `plugin_rules` and `tool_rules` so MCPViews actually injects Ludflow's multi-org auth guidance into sessions instead of only showing it in registry metadata
+- **feat**: Add `list_organizations` renderer mapping and org-discovery guidance so agents can discover org membership, inspect `has_mcpviews_token`, and authenticate the correct organization before cross-org Ludflow tool calls
+
 # v0.5.0
 
 ## Renderer Convergence
