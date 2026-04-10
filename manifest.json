@@ -66,7 +66,11 @@
         ]
       }
     ],
-    "renderer_names": []
+    "renderer_names": [
+      "ludflow_documents_home",
+      "ludflow_data_governance",
+      "ludflow_knowledge_dex"
+    ]
   },
   "plugin_rules": [
     "Ludflow is a multi-org OAuth plugin. Before working in a different organization, call list_organizations to discover available orgs and token status. For follow-up Ludflow tool calls in that org, include organization_id.",
@@ -199,6 +203,36 @@
         "get_column_context"
       ],
       "rule": "Transform column context into rich_content markdown. Title: 'Column: dataSource.table.column'. Body: Show column metadata (type, nullable, PK), description, linked business concepts, document links, and cross-column relationships. Add plugin citations for linked entities."
+    },
+    {
+      "name": "ludflow_documents_home",
+      "description": "Standalone Ludflow documents workspace with org switching, document browser, markdown editor, and live preview",
+      "scope": "universal",
+      "rule": "Push directly to open Ludflow's standalone documents workspace inside MCP Views. The renderer fetches organizations, folders, and documents via Ludflow MCP tools. Optionally pass organization_id to preselect an org and document_id to open a specific document.",
+      "invoke_schema": "{ \"type\": \"object\", \"properties\": { \"organization_id\": { \"type\": \"string\", \"description\": \"Organization ID to open.\" }, \"document_id\": { \"type\": \"string\", \"description\": \"Document ID to open immediately.\" } } }",
+      "data_hint": "{ organization_id?: string, document_id?: string }",
+      "standalone": true,
+      "standalone_label": "Documents"
+    },
+    {
+      "name": "ludflow_data_governance",
+      "description": "Standalone Ludflow data governance browser with datasource navigation, table schemas, and column context",
+      "scope": "universal",
+      "rule": "Push directly to open Ludflow's standalone data governance workspace inside MCP Views. The renderer fetches organizations, data sources, tables, and column context via Ludflow MCP tools. Optionally pass organization_id, table_id, and column_id to focus the initial view.",
+      "invoke_schema": "{ \"type\": \"object\", \"properties\": { \"organization_id\": { \"type\": \"string\", \"description\": \"Organization ID to open.\" }, \"table_id\": { \"type\": \"string\", \"description\": \"Table ID to focus.\" }, \"column_id\": { \"type\": \"string\", \"description\": \"Column ID to focus.\" } } }",
+      "data_hint": "{ organization_id?: string, table_id?: string, column_id?: string }",
+      "standalone": true,
+      "standalone_label": "Data Governance"
+    },
+    {
+      "name": "ludflow_knowledge_dex",
+      "description": "Standalone Ludflow Knowledge Dex workspace with organizational concepts and personal entry management",
+      "scope": "universal",
+      "rule": "Push directly to open Ludflow's standalone Knowledge Dex workspace inside MCP Views. The renderer fetches organizations, organizational concepts, and personal knowledge entries via Ludflow MCP tools. Optionally pass organization_id, mode, and entry_id to focus the initial view.",
+      "invoke_schema": "{ \"type\": \"object\", \"properties\": { \"organization_id\": { \"type\": \"string\", \"description\": \"Organization ID to open.\" }, \"mode\": { \"type\": \"string\", \"enum\": [\"org\", \"personal\"], \"description\": \"Initial tab to show.\" }, \"entry_id\": { \"type\": \"string\", \"description\": \"Personal entry ID to focus.\" } } }",
+      "data_hint": "{ organization_id?: string, mode?: 'org'|'personal', entry_id?: string }",
+      "standalone": true,
+      "standalone_label": "Knowledge Dex"
     }
   ],
   "prompt_definitions": [

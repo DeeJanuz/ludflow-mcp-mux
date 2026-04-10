@@ -31,20 +31,22 @@ Ludflow uses org-scoped OAuth tokens in MCPViews.
 
 ## Renderers
 
+### Tool Views
+
 | Renderer | Tools |
 |----------|-------|
-| `rich_content` | `list_organizations` |
-| `search_results` | `search_codebase`, `vector_search` |
-| `code_units` | `get_code_units` |
-| `document_preview` | `get_document`, `write_document`, `list_documents` |
-| `data_schema` | `get_data_schema`, `get_data_lake_schema` |
-| `data_draft_diff` | `manage_data_draft` |
-| `dependencies` | `get_dependencies` |
-| `file_content` | `get_file_content` |
-| `module_overview` | `get_module_overview` |
-| `analysis_stats` | `get_analysis_stats` |
-| `knowledge_dex` | `get_business_concepts`, `manage_knowledge_entries` |
-| `column_context` | `get_column_context` |
+| `rich_content` | `list_organizations`, `search_codebase`, `vector_search`, `get_code_units`, `get_document`, `write_document`, `list_documents`, `get_dependencies`, `get_file_content`, `get_module_overview`, `get_analysis_stats`, `get_column_context` |
+| `structured_data` | `get_data_schema`, `get_data_lake_schema`, `manage_data_draft`, `get_business_concepts`, `manage_knowledge_entries` |
+
+### Standalone App Pages
+
+These renderers appear in the MCP Views app launcher and let users open Ludflow-style pages without leaving MCP Views:
+
+| Renderer | Launcher Label | Purpose |
+|----------|----------------|---------|
+| `ludflow_documents_home` | `Documents` | Browse folders and documents, edit markdown, and preview document content |
+| `ludflow_data_governance` | `Data Governance` | Explore data sources, inspect tables, and drill into column context |
+| `ludflow_knowledge_dex` | `Knowledge Dex` | View organizational concepts and manage personal Knowledge Dex entries |
 
 ## License
 
