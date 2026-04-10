@@ -215,9 +215,9 @@
     },
     {
       "name": "ludflow_data_governance",
-      "description": "Standalone Ludflow data governance workspace with datasource rails, schema tables, column context, and the embedded Knowledge Dex panel",
+      "description": "Standalone Ludflow data governance workspace with datasource rails, table rails, the production metadata table, optional column context, and the embedded Knowledge Dex panel",
       "scope": "universal",
-      "rule": "Push directly to open Ludflow's standalone data governance workspace inside MCP Views. The renderer fetches organizations, data sources, tables, column context, organizational concepts, personal knowledge entries, and Knowledge Dex metadata through Ludflow MCP tools. Optionally pass organization_id, table_id, column_id, knowledge_open, and knowledge_tab to focus the initial view.",
+      "rule": "Push directly to open Ludflow's standalone data governance workspace inside MCP Views. The renderer fetches organizations, governed tables with metadata columns and production values, optional column context, organizational concepts, personal knowledge entries, and Knowledge Dex metadata through Ludflow MCP tools. Optionally pass organization_id, table_id, column_id, knowledge_open, and knowledge_tab to focus the initial view.",
       "invoke_schema": "{ \"type\": \"object\", \"properties\": { \"organization_id\": { \"type\": \"string\", \"description\": \"Organization ID to open.\" }, \"table_id\": { \"type\": \"string\", \"description\": \"Table ID to focus.\" }, \"column_id\": { \"type\": \"string\", \"description\": \"Column ID to focus.\" }, \"knowledge_open\": { \"type\": \"boolean\", \"description\": \"Open the Knowledge Dex panel immediately.\" }, \"knowledge_tab\": { \"type\": \"string\", \"enum\": [\"org\", \"personal\"], \"description\": \"Initial Knowledge Dex tab when the panel is open.\" } } }",
       "data_hint": "{ organization_id?: string, table_id?: string, column_id?: string, knowledge_open?: boolean, knowledge_tab?: 'org'|'personal' }",
       "standalone": true,

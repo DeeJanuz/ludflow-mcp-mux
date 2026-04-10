@@ -44,7 +44,7 @@ These renderers appear in the MCP Views app launcher and let users open Ludflow-
 
 | Renderer | Launcher Label | Purpose |
 |----------|----------------|---------|
-| `ludflow_documents_home` | `Documents` | Browse folders and documents, edit markdown, and preview document content |
+| `ludflow_documents_home` | `Documents` | Browse folders and documents, filter by status or sort order, and open document content in a new rich text tab |
 | `ludflow_data_governance` | `Data Governance` | Explore data sources, inspect tables, drill into column context, and open the embedded Knowledge Dex panel |
 
 The legacy `ludflow_knowledge_dex` renderer still exists as an alias, but it now opens the embedded Knowledge Dex view inside the Data Governance workspace instead of appearing as a separate launcher page.

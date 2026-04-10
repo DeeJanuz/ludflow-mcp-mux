@@ -127,13 +127,37 @@
       '.lf-list-button-active { background: var(--lf-brand-50); border-color: var(--lf-brand-200); }',
       '.lf-list-title { font-size: 14px; font-weight: 500; color: var(--lf-text); word-break: break-word; }',
       '.lf-list-subtitle { font-size: 12px; line-height: 1.4; color: var(--lf-text-muted); }',
-      '.lf-governance-main { flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; background: var(--lf-surface); }',
+      '.lf-governance-main { flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; background: var(--lf-bg); }',
+      '.lf-panel-stack { flex: 1; min-height: 0; overflow: auto; padding: 16px; display: flex; flex-direction: column; gap: 16px; }',
+      '.lf-panel-toggle { appearance: none; display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--lf-border); background: var(--lf-surface); color: var(--lf-text-muted); box-shadow: var(--lf-shadow); cursor: pointer; font: inherit; font-size: 14px; }',
+      '.lf-panel-toggle:hover { background: var(--lf-brand-100); color: var(--lf-text); }',
+      '.lf-source-rail { width: 288px; min-width: 288px; }',
+      '.lf-table-rail { width: 264px; min-width: 264px; }',
+      '.lf-rail-collapsed { width: 48px; min-width: 48px; }',
+      '.lf-collapsed-rail { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 16px 8px; }',
+      '.lf-vertical-label { writing-mode: vertical-rl; transform: rotate(180deg); color: var(--lf-text-muted); font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }',
       '.lf-subsystem-row { padding: 8px 24px; border-bottom: 1px solid var(--lf-border); background: var(--lf-surface); }',
       '.lf-subsystem-buttons { display: inline-flex; align-items: center; gap: 8px; }',
       '.lf-subsystem-button { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--lf-border); border-radius: 8px; background: var(--lf-surface); color: var(--lf-text); padding: 8px 12px; font: inherit; font-size: 13px; cursor: pointer; }',
       '.lf-subsystem-button-active { background: var(--lf-brand-50); border-color: var(--lf-brand-200); }',
       '.lf-subsystem-caret { width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid var(--lf-text-muted); transition: transform 120ms ease; }',
       '.lf-subsystem-caret-open { transform: rotate(180deg); }',
+      '.lf-hero-card { border: 1px solid var(--lf-border); border-radius: 12px; background: var(--lf-surface); box-shadow: var(--lf-shadow); padding: 20px; display: flex; flex-direction: column; gap: 16px; }',
+      '.lf-hero-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }',
+      '.lf-hero-title { font-size: 24px; line-height: 1.15; font-weight: 600; color: var(--lf-text); }',
+      '.lf-hero-copy { margin-top: 4px; color: var(--lf-text-muted); font-size: 13px; line-height: 1.5; }',
+      '.lf-stat-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }',
+      '.lf-stat-pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--lf-border); background: var(--lf-surface-muted); color: var(--lf-text-muted); font-size: 12px; }',
+      '.lf-stat-pill-strong { color: var(--lf-text); background: var(--lf-brand-50); border-color: var(--lf-brand-200); }',
+      '.lf-meta-banner { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border: 1px solid var(--lf-border); border-radius: 10px; background: var(--lf-surface); box-shadow: var(--lf-shadow); }',
+      '.lf-meta-banner-dot { width: 10px; height: 10px; margin-top: 4px; border-radius: 999px; background: var(--lf-brand-300); flex-shrink: 0; }',
+      '.lf-meta-banner-title { color: var(--lf-text); font-size: 14px; font-weight: 600; }',
+      '.lf-meta-banner-copy { margin-top: 4px; color: var(--lf-text-muted); font-size: 12px; line-height: 1.5; }',
+      '.lf-metadata-card { border: 1px solid var(--lf-border); border-radius: 12px; background: var(--lf-surface); box-shadow: var(--lf-shadow); overflow: hidden; }',
+      '.lf-metadata-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 12px 16px; border-bottom: 1px solid var(--lf-border); background: var(--lf-surface-muted); }',
+      '.lf-metadata-toolbar-copy { color: var(--lf-text-muted); font-size: 12px; line-height: 1.45; }',
+      '.lf-metadata-toolbar-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }',
+      '.lf-toolbar-badge { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--lf-border); background: var(--lf-surface); color: var(--lf-text); font-size: 12px; }',
       '.lf-kd-panel { border-bottom: 1px solid var(--lf-border); background: var(--lf-surface-muted); padding: 16px 24px; }',
       '.lf-kd-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }',
       '.lf-kd-tabs { display: inline-flex; align-items: center; gap: 2px; padding: 2px; border: 1px solid var(--lf-border); border-radius: 8px; background: var(--lf-surface); }',
@@ -145,13 +169,27 @@
       '.lf-table thead tr { background: var(--lf-surface-soft); }',
       '.lf-table th, .lf-table td { padding: 10px 12px; border-bottom: 1px solid var(--lf-border); vertical-align: top; text-align: left; }',
       '.lf-table th { position: sticky; top: 0; z-index: 1; color: var(--lf-text-muted); font-size: 12px; font-weight: 500; background: var(--lf-surface-soft); white-space: nowrap; }',
+      '.lf-table tbody tr:last-child td { border-bottom: none; }',
       '.lf-table-row-entity { background: var(--lf-brand-50); }',
       '.lf-table-row-attribute { background: var(--lf-surface-muted); }',
       '.lf-table-row-selected { outline: 2px solid var(--lf-brand-300); outline-offset: -2px; }',
+      '.lf-meta-row { cursor: pointer; }',
+      '.lf-meta-row:hover { background: var(--lf-brand-100); }',
       '.lf-table-name { display: flex; align-items: center; gap: 8px; }',
       '.lf-table-shape { width: 10px; height: 10px; flex-shrink: 0; }',
       '.lf-table-shape-entity { border-radius: 2px; background: var(--lf-brand-600); }',
       '.lf-table-shape-attribute { border-radius: 999px; background: var(--lf-text-muted); }',
+      '.lf-field-name { font-size: 13px; font-weight: 600; color: var(--lf-text); line-height: 1.45; }',
+      '.lf-field-copy { margin-top: 4px; color: var(--lf-text-muted); font-size: 12px; line-height: 1.45; }',
+      '.lf-cell-stack { display: flex; flex-direction: column; gap: 6px; }',
+      '.lf-cell-badges { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }',
+      '.lf-cell-badge { display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 999px; border: 1px solid var(--lf-border); font-size: 11px; line-height: 1; }',
+      '.lf-cell-badge-success { color: var(--lf-success-text); background: var(--lf-success-bg); border-color: transparent; }',
+      '.lf-cell-badge-muted { color: var(--lf-text-muted); background: var(--lf-surface-muted); }',
+      '.lf-cell-badge-brand { color: var(--lf-text); background: var(--lf-brand-50); border-color: var(--lf-brand-200); }',
+      '.lf-cell-code { display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 8px; background: var(--lf-surface-muted); border: 1px solid var(--lf-border); color: var(--lf-text); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; }',
+      '.lf-cell-link { border: none; background: transparent; padding: 0; color: var(--lf-brand-600); font: inherit; font-size: 12px; cursor: pointer; text-align: left; }',
+      '.lf-cell-link:hover { text-decoration: underline; }',
       '.lf-cell-input { width: 100%; min-height: 32px; padding: 6px 8px; border: 1px solid transparent; border-radius: 6px; background: transparent; color: var(--lf-text); font: inherit; }',
       '.lf-cell-input:hover { border-color: var(--lf-border); background: var(--lf-surface); }',
       '.lf-cell-input-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 12px; }',
@@ -188,7 +226,7 @@
       '.lf-help { color: var(--lf-text-muted); font-size: 12px; line-height: 1.45; }',
       '@media (max-width: 1200px) { .lf-governance-layout { flex-direction: column; } .lf-rail, .lf-rail-compact { width: 100%; min-width: 0; max-height: 320px; border-right: none; border-bottom: 1px solid var(--lf-border); } .lf-doc-content { grid-template-columns: minmax(0, 1fr); } .lf-doc-pane + .lf-doc-pane { border-left: none; border-top: 1px solid var(--lf-border); } }',
       '@media (max-width: 900px) { .lf-home-layout { grid-template-columns: 1fr; } .lf-sidebar { width: 100%; min-width: 0; max-height: 320px; border-right: none; border-bottom: 1px solid var(--lf-border); } }',
-      '@media (max-width: 720px) { .lf-topnav, .lf-breadcrumbs, .lf-subsystem-row, .lf-kd-panel, .lf-metadata-inner { padding-left: 16px; padding-right: 16px; } .lf-notice { margin-left: 16px; margin-right: 16px; } .lf-sidebar-body, .lf-rail-body, .lf-doc-pane { padding: 12px; } .lf-doc-header, .lf-doc-tabs, .lf-sidebar-header { padding-left: 12px; padding-right: 12px; } .lf-grid-2 { grid-template-columns: 1fr; } .lf-topnav-center { width: 100%; justify-content: flex-start; } }'
+      '@media (max-width: 720px) { .lf-topnav, .lf-breadcrumbs, .lf-subsystem-row, .lf-kd-panel, .lf-metadata-inner { padding-left: 16px; padding-right: 16px; } .lf-notice { margin-left: 16px; margin-right: 16px; } .lf-sidebar-body, .lf-rail-body, .lf-doc-pane, .lf-panel-stack { padding: 12px; } .lf-doc-header, .lf-doc-tabs, .lf-sidebar-header, .lf-metadata-toolbar { padding-left: 12px; padding-right: 12px; } .lf-grid-2 { grid-template-columns: 1fr; } .lf-topnav-center { width: 100%; justify-content: flex-start; } .lf-hero-card { padding: 16px; } }'
     ].join('\n');
 
     document.head.appendChild(style);
@@ -311,28 +349,34 @@
     return 'http://localhost:4200' + normalized;
   }
 
-  function directMcpFetch(toolName, args) {
-    return fetch(localUrl('/mcp'), {
+  function postLocalJson(path, body, errorPrefix) {
+    return fetch(localUrl(path), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
-      body: JSON.stringify({
-        jsonrpc: '2.0',
-        id: 1,
-        method: 'tools/call',
-        params: {
-          name: toolName,
-          arguments: args || {}
-        }
-      })
+      body: JSON.stringify(body || {})
     }).then(function (res) {
-      if (!res.ok) throw new Error('MCP request failed: ' + res.status);
-      return res.json().then(function (payload) {
-        if (payload && payload.error && payload.error.message) throw new Error(payload.error.message);
-        return payload && payload.result ? payload.result : payload;
+      if (!res.ok) throw new Error((errorPrefix || 'Request failed') + ': ' + res.status);
+      return res.json().catch(function () {
+        return {};
       });
+    });
+  }
+
+  function directMcpFetch(toolName, args) {
+    return postLocalJson('/mcp', {
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'tools/call',
+      params: {
+        name: toolName,
+        arguments: args || {}
+      }
+    }, 'MCP request failed').then(function (payload) {
+      if (payload && payload.error && payload.error.message) throw new Error(payload.error.message);
+      return payload && payload.result ? payload.result : payload;
     });
   }
 
@@ -352,6 +396,48 @@
 
   function callTool(toolName, args) {
     return directMcpFetch(prefixTool(toolName), args || {}).then(parseToolResponse);
+  }
+
+  function fetchPagedCollection(toolName, args, options) {
+    var settings = options || {};
+    var pageSize = settings.limit || 200;
+    var offset = settings.offset || 0;
+    var maxPages = settings.maxPages || 100;
+    var extractItems = settings.extract || function (payload) {
+      return payload && payload.data ? payload.data : payload;
+    };
+    var allItems = [];
+
+    function loadPage(pageIndex) {
+      var pageArgs = cloneObject(args || {});
+      pageArgs.limit = pageSize;
+      pageArgs.offset = offset;
+
+      return callTool(toolName, pageArgs).then(function (payload) {
+        var pageItems = safeArray(extractItems(payload));
+        allItems = allItems.concat(pageItems);
+        if (pageItems.length < pageSize || pageIndex + 1 >= maxPages) {
+          return allItems;
+        }
+        offset += pageSize;
+        return loadPage(pageIndex + 1);
+      });
+    }
+
+    return loadPage(0);
+  }
+
+  function pushContentSession(toolName, data, meta, toolArgs, sessionId) {
+    return postLocalJson('/api/push', {
+      toolName: toolName,
+      toolArgs: toolArgs || {},
+      result: {
+        data: data || {},
+        meta: meta || {}
+      },
+      reviewRequired: false,
+      sessionId: sessionId
+    }, 'Push request failed');
   }
 
   function invokeTauri(command, args) {
@@ -810,8 +896,9 @@
 
     function openDocumentSession(documentItem) {
       var utilsObject = utils();
+      var sessionId = 'ludflow-document-' + safeText(documentItem.id, 'untitled');
       var sessionPayload = {
-        toolName: 'get_document',
+        toolName: 'rich_content',
         contentType: 'rich_content',
         data: buildDocumentRichContent(documentItem),
         meta: {
@@ -822,14 +909,19 @@
           document_id: documentItem.id,
           title: documentItem.title || 'Untitled Document'
         },
-        sessionKey: 'ludflow-document:' + documentItem.id
+        sessionKey: 'ludflow-document:' + safeText(documentItem.id, 'untitled')
       };
       if (utilsObject && typeof utilsObject.openSession === 'function') {
         utilsObject.openSession(sessionPayload);
-        return;
+        return Promise.resolve();
       }
-      state.error = 'Opening document tabs requires the updated MCP Views app shell.';
-      render();
+      return pushContentSession(
+        'rich_content',
+        sessionPayload.data,
+        sessionPayload.meta,
+        sessionPayload.toolArgs,
+        sessionId
+      );
     }
 
     function openDocument(documentId) {
@@ -845,14 +937,15 @@
         .then(function (payload) {
           var documentItem = payload.data || payload;
           state.selectedDocumentId = documentItem.id || documentId;
-          state.loading = false;
-          state.initializing = false;
-          state.notice = {
-            kind: 'success',
-            text: 'Opened "' + safeText(documentItem.title, 'Untitled Document') + '" in a new tab.'
-          };
-          openDocumentSession(documentItem);
-          render();
+          return openDocumentSession(documentItem).then(function () {
+            state.loading = false;
+            state.initializing = false;
+            state.notice = {
+              kind: 'success',
+              text: 'Opened "' + safeText(documentItem.title, 'Untitled Document') + '" in a new tab.'
+            };
+            render();
+          });
         })
         .catch(function (error) {
           state.loading = false;
@@ -873,11 +966,16 @@
       render();
       return Promise.all([
         callTool('manage_folders', withOrg(state, { action: 'list' })),
-        callTool('list_documents', withOrg(state, { format: 'full', limit: 200 }))
+        fetchPagedCollection('list_documents', withOrg(state, { format: 'full' }), {
+          limit: 200,
+          extract: function (payload) {
+            return payload.data || payload;
+          }
+        })
       ])
         .then(function (results) {
           state.folders = safeArray(results[0].data || results[0]);
-          state.documents = safeArray(results[1].data || results[1]);
+          state.documents = safeArray(results[1]);
           rememberExpandedFolders();
           if (state.selectedFolderId && !folderTree()[state.selectedFolderId] && !state.folders.some(function (folder) { return folder.id === state.selectedFolderId; })) {
             state.selectedFolderId = null;
@@ -1136,6 +1234,7 @@
       selectedColumnId: data.column_id || null,
       columnContext: null,
       tableSearch: '',
+      columnSearch: '',
       knowledgeOpen: !!data.knowledge_open,
       knowledgeTab: data.knowledge_tab === 'personal' ? 'personal' : 'org',
       orgConcepts: [],
@@ -1149,7 +1248,9 @@
         name: '',
         type: 'TEXT'
       },
-      composer: null
+      composer: null,
+      dataSourcesCollapsed: false,
+      tablesCollapsed: false
     };
 
     function dataSources() {
@@ -1196,18 +1297,163 @@
       return safeArray(selectedTable() && selectedTable().columns);
     }
 
+    function selectedMetadataColumns() {
+      var table = selectedTable();
+      return safeArray(table && (table.metadataColumns || table.metadata_columns));
+    }
+
+    function filteredColumns() {
+      var query = safeText(state.columnSearch).trim().toLowerCase();
+      return selectedTableColumns().filter(function (column) {
+        if (!query) return true;
+        return safeText(column.name).toLowerCase().indexOf(query) >= 0 ||
+          safeText(column.description).toLowerCase().indexOf(query) >= 0 ||
+          safeText(columnTypeName(column)).toLowerCase().indexOf(query) >= 0;
+      });
+    }
+
+    function metadataValueEntry(column, metadataColumnId) {
+      var values = safeArray(column && column.metadataValues);
+      for (var i = 0; i < values.length; i += 1) {
+        if (values[i].metadataColumnDefinitionId === metadataColumnId) return values[i];
+      }
+      return null;
+    }
+
+    function metadataValueCount(table) {
+      var count = 0;
+      safeArray(table && table.columns).forEach(function (column) {
+        count += safeArray(column.metadataValues).length;
+      });
+      return count;
+    }
+
+    function formatDisplayDate(value) {
+      if (!value) return '';
+      var parsed = new Date(value);
+      if (isNaN(parsed.getTime())) return String(value);
+      return parsed.toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+
+    function metadataItemLabel(item) {
+      if (item == null) return '';
+      if (typeof item === 'string' || typeof item === 'number' || typeof item === 'boolean') return String(item);
+      if (Array.isArray(item)) return item.map(metadataItemLabel).filter(Boolean).join(', ');
+      if (typeof item === 'object') {
+        return safeText(
+          item.name ||
+          item.title ||
+          item.label ||
+          item.columnName ||
+          item.tableName ||
+          item.functionName ||
+          item.filePath ||
+          item.id,
+          ''
+        );
+      }
+      return String(item);
+    }
+
+    function renderMetadataValue(value, type) {
+      if (value == null || value === '' || (Array.isArray(value) && !value.length)) {
+        return el('div', 'lf-cell-muted', '—');
+      }
+
+      if (type === 'DATE') {
+        return el('div', 'lf-cell-text', formatDisplayDate(value));
+      }
+
+      if (typeof value === 'boolean') {
+        var booleanWrap = el('div', 'lf-cell-badges');
+        booleanWrap.appendChild(el('span', 'lf-cell-badge ' + (value ? 'lf-cell-badge-success' : 'lf-cell-badge-muted'), value ? 'Yes' : 'No'));
+        return booleanWrap;
+      }
+
+      if (Array.isArray(value)) {
+        var listWrap = el('div', 'lf-cell-stack');
+        var labels = value.map(metadataItemLabel).filter(Boolean);
+        if (!labels.length) {
+          listWrap.appendChild(el('div', 'lf-cell-muted', String(value.length) + ' linked item' + (value.length === 1 ? '' : 's')));
+          return listWrap;
+        }
+        if (type === 'MULTISELECT' || value.every(function (item) { return typeof item === 'string' || typeof item === 'number'; })) {
+          var tagList = el('div', 'lf-tag-list');
+          labels.slice(0, 6).forEach(function (label) {
+            tagList.appendChild(makeTag(label));
+          });
+          if (labels.length > 6) tagList.appendChild(makeTag('+' + (labels.length - 6) + ' more'));
+          listWrap.appendChild(tagList);
+          return listWrap;
+        }
+        labels.slice(0, 3).forEach(function (label) {
+          listWrap.appendChild(el('div', 'lf-cell-text', label));
+        });
+        if (labels.length > 3) {
+          listWrap.appendChild(el('div', 'lf-cell-muted', '+' + (labels.length - 3) + ' more'));
+        }
+        return listWrap;
+      }
+
+      if (typeof value === 'object') {
+        var objectLabel = metadataItemLabel(value);
+        if (objectLabel) return el('div', 'lf-cell-text', objectLabel);
+        return el('div', 'lf-cell-code', JSON.stringify(value));
+      }
+
+      if (type === 'COLUMN_REFERENCE' || type === 'KNOWLEDGE_DEX_REFERENCE' || type === 'DATA_LAKE_REFERENCE') {
+        return el('div', 'lf-cell-code', String(value));
+      }
+
+      return el('div', 'lf-cell-text', String(value));
+    }
+
     function ensureSelections() {
+      var matchedTable = null;
+      if (state.selectedTableId) {
+        for (var tableIndex = 0; tableIndex < state.tables.length; tableIndex += 1) {
+          if (state.tables[tableIndex].id === state.selectedTableId) {
+            matchedTable = state.tables[tableIndex];
+            break;
+          }
+        }
+      }
+      if (!matchedTable && state.selectedColumnId) {
+        for (var ownerIndex = 0; ownerIndex < state.tables.length; ownerIndex += 1) {
+          if (safeArray(state.tables[ownerIndex].columns).some(function (column) { return column.id === state.selectedColumnId; })) {
+            matchedTable = state.tables[ownerIndex];
+            state.selectedTableId = matchedTable.id;
+            break;
+          }
+        }
+      }
+      if (matchedTable) {
+        var matchedSource = tableDataSource(matchedTable);
+        state.selectedDataSourceId = matchedSource.id || matchedTable.dataSourceId || matchedTable.data_source_id || state.selectedDataSourceId;
+      }
+
       var sources = dataSources();
-      if (sources.length && !sources.some(function (source) { return source.id === state.selectedDataSourceId; })) {
+      if (state.selectedDataSourceId && !sources.some(function (source) { return source.id === state.selectedDataSourceId; })) {
+        state.selectedDataSourceId = null;
+      }
+      if (!state.selectedDataSourceId && sources.length) {
         state.selectedDataSourceId = sources[0].id;
       }
       var tables = visibleTables();
-      if (tables.length && !tables.some(function (table) { return table.id === state.selectedTableId; })) {
+      if (state.selectedTableId && !tables.some(function (table) { return table.id === state.selectedTableId; })) {
+        state.selectedTableId = null;
+      }
+      if (!state.selectedTableId && tables.length) {
         state.selectedTableId = tables[0].id;
       }
       var columns = selectedTableColumns();
-      if (columns.length && !columns.some(function (column) { return column.id === state.selectedColumnId; })) {
-        state.selectedColumnId = columns[0].id;
+      if (state.selectedColumnId && !columns.some(function (column) { return column.id === state.selectedColumnId; })) {
+        state.selectedColumnId = null;
+        state.columnContext = null;
       }
     }
 
@@ -1262,16 +1508,27 @@
       render();
 
       return Promise.all([
-        callTool('get_data_schema', withOrg(state, {
+        fetchPagedCollection('get_data_schema', withOrg(state, {
           format: 'full',
-          include_metadata: false,
-          limit: 500
-        })),
-        callTool('get_business_concepts', withOrg(state, {
+          include_metadata: true,
+          include_values: true
+        }), {
+          limit: 500,
+          extract: function (payload) {
+            var data = payload.data || payload;
+            return data.tables || data;
+          }
+        }),
+        fetchPagedCollection('get_business_concepts', withOrg(state, {
           format: 'full',
-          include_mappings: true,
-          limit: 200
-        })),
+          include_mappings: true
+        }), {
+          limit: 500,
+          extract: function (payload) {
+            var data = payload.data || payload;
+            return data.concepts || data;
+          }
+        }),
         callTool('manage_knowledge_entries', withOrg(state, {
           action: 'list',
           include_metadata: true
@@ -1281,11 +1538,8 @@
         }))
       ])
         .then(function (results) {
-          var schemaPayload = results[0].data || results[0];
-          state.tables = safeArray(schemaPayload.tables || schemaPayload);
-
-          var conceptPayload = results[1].data || results[1];
-          state.orgConcepts = rootOrganizationConcepts(safeArray(conceptPayload.concepts || conceptPayload));
+          state.tables = safeArray(results[0]);
+          state.orgConcepts = rootOrganizationConcepts(safeArray(results[1]));
 
           var entryPayload = results[2].data || results[2];
           state.personalEntries = safeArray(entryPayload.entries || entryPayload);
@@ -1800,81 +2054,177 @@
 
     function renderGovernanceMain(main) {
       if (!state.selectedDataSourceId) {
-        var blank = el('div', 'lf-doc-blank', 'Select a data source to get started.');
-        main.appendChild(blank);
+        renderEmptyScreen(main, 'Select a data source to get started', 'Choose a data source from the left rail to browse its governed tables.');
         return;
       }
       if (!state.selectedTableId) {
-        var blankTable = el('div', 'lf-doc-blank', 'Select a table to inspect its schema and context.');
-        main.appendChild(blankTable);
+        renderEmptyScreen(main, 'Select a table to view metadata', 'Choose a table from the current data source to open its production metadata view.');
         return;
       }
 
-      var panel = el('div', 'lf-metadata-panel');
-      main.appendChild(panel);
-
-      var inner = el('div', 'lf-metadata-inner');
-      panel.appendChild(inner);
-
       var table = selectedTable();
       var source = tableDataSource(table);
+      var metadataColumns = selectedMetadataColumns();
+      var visibleColumnRows = filteredColumns();
 
-      var header = el('div', 'lf-metadata-header');
-      inner.appendChild(header);
+      var panel = el('div', 'lf-panel-stack');
+      main.appendChild(panel);
+
+      var hero = el('section', 'lf-hero-card');
+      panel.appendChild(hero);
+
+      var heroTop = el('div', 'lf-hero-top');
+      hero.appendChild(heroTop);
 
       var intro = el('div');
-      intro.appendChild(el('div', 'lf-metadata-title', table.name || 'Table'));
-      intro.appendChild(el('div', 'lf-metadata-subtitle', selectedTableColumns().length + ' columns • ' + safeText(source.name, 'Data Source')));
-      header.appendChild(intro);
+      intro.appendChild(el('div', 'lf-hero-title', table.name || 'Table'));
+      intro.appendChild(el('div', 'lf-hero-copy', safeArray(table.columns).length + ' column' + (safeArray(table.columns).length === 1 ? '' : 's') + ' across ' + metadataColumns.length + ' metadata field' + (metadataColumns.length === 1 ? '' : 's') + '.'));
+      heroTop.appendChild(intro);
 
       var chips = el('div', 'lf-chip-row');
-      chips.appendChild(makeChip(source.sourceType || source.source_type || 'DDL'));
-      chips.appendChild(makeChip('Table ID: ' + table.id));
-      header.appendChild(chips);
+      chips.appendChild(makeChip(source.sourceType || source.source_type || 'Data Source'));
+      chips.appendChild(makeChip('Production Metadata'));
+      chips.appendChild(makeChip(safeText(source.name, 'Data Source')));
+      heroTop.appendChild(chips);
 
-      inner.appendChild(el('div', 'lf-info-card', 'This standalone renderer keeps Ludflow’s datasource rail, tables rail, and schema-first detail flow, while using MCP tools for fetching and updates.'));
+      var statRow = el('div', 'lf-stat-row');
+      statRow.appendChild(el('div', 'lf-stat-pill lf-stat-pill-strong', safeArray(table.columns).length + ' fields'));
+      statRow.appendChild(el('div', 'lf-stat-pill', metadataColumns.length + ' metadata columns'));
+      statRow.appendChild(el('div', 'lf-stat-pill', metadataValueCount(table) + ' populated values'));
+      statRow.appendChild(el('div', 'lf-stat-pill', 'Source: ' + safeText(source.name, 'Unknown')));
+      hero.appendChild(statRow);
+
+      var banner = el('div', 'lf-meta-banner');
+      banner.appendChild(el('div', 'lf-meta-banner-dot'));
+      var bannerCopy = el('div');
+      bannerCopy.appendChild(el('div', 'lf-meta-banner-title', 'Production metadata view'));
+      bannerCopy.appendChild(el('div', 'lf-meta-banner-copy', 'This mirrors Ludflow’s main governance workflow: data source rail, table rail, and a metadata-first table view. Click a field row to load governed column context below.'));
+      banner.appendChild(bannerCopy);
+      panel.appendChild(banner);
+
+      var metadataCard = el('section', 'lf-metadata-card');
+      panel.appendChild(metadataCard);
+
+      var toolbar = el('div', 'lf-metadata-toolbar');
+      toolbar.appendChild(el('div', 'lf-metadata-toolbar-copy', metadataColumns.length
+        ? 'Scroll horizontally to inspect dynamic metadata columns.'
+        : 'No metadata columns are defined for this table yet. The fixed schema fields still match Ludflow’s table layout.'));
+      var toolbarRight = el('div', 'lf-metadata-toolbar-right');
+      toolbarRight.appendChild(el('div', 'lf-toolbar-badge', state.selectedColumnId ? 'Context loaded' : 'Click row for context'));
+      var search = createInput('text', state.columnSearch, 'Filter fields');
+      search.style.width = '220px';
+      search.addEventListener('input', function () {
+        state.columnSearch = search.value;
+        render();
+      });
+      toolbarRight.appendChild(search);
+      toolbar.appendChild(toolbarRight);
+      metadataCard.appendChild(toolbar);
 
       var schemaWrap = el('div', 'lf-table-scroll');
-      inner.appendChild(schemaWrap);
-      var schemaTable = el('table', 'lf-table lf-schema-table');
+      metadataCard.appendChild(schemaWrap);
+      var schemaTable = el('table', 'lf-table');
       schemaWrap.appendChild(schemaTable);
       var head = document.createElement('thead');
-      head.innerHTML = '<tr><th>Column</th><th>Type</th><th>Nullable</th><th>Primary Key</th><th>Description</th></tr>';
+      var headRow = document.createElement('tr');
+      ['Field Name', 'Data Type', 'Nullable', 'PK']
+        .concat(metadataColumns.map(function (column) { return column.name; }))
+        .forEach(function (label) {
+          var th = document.createElement('th');
+          th.textContent = label;
+          headRow.appendChild(th);
+        });
+      head.appendChild(headRow);
       schemaTable.appendChild(head);
+
       var body = document.createElement('tbody');
-      safeArray(table.columns).forEach(function (column) {
+      schemaTable.appendChild(body);
+
+      if (!visibleColumnRows.length) {
+        var emptyRow = document.createElement('tr');
+        var emptyCell = document.createElement('td');
+        emptyCell.colSpan = 4 + metadataColumns.length;
+        emptyCell.className = 'lf-empty-table';
+        emptyCell.textContent = 'No fields match the current filter.';
+        emptyRow.appendChild(emptyCell);
+        body.appendChild(emptyRow);
+      }
+
+      visibleColumnRows.forEach(function (column) {
         var row = document.createElement('tr');
-        if (column.id === state.selectedColumnId) row.className = 'lf-table-row-selected';
+        row.className = 'lf-meta-row' + (column.id === state.selectedColumnId ? ' lf-table-row-selected' : '');
         row.addEventListener('click', function () {
           loadColumnContext(column.id);
         });
-        row.innerHTML =
-          '<td><strong>' + escapeHtml(column.name || 'Unnamed') + '</strong></td>' +
-          '<td>' + escapeHtml(columnTypeName(column)) + '</td>' +
-          '<td>' + (column.nullable ? 'Yes' : 'No') + '</td>' +
-          '<td>' + ((column.isPrimaryKey || column.is_primary_key) ? 'Yes' : 'No') + '</td>' +
-          '<td>' + escapeHtml(column.description || '—') + '</td>';
+
+        var nameCell = document.createElement('td');
+        nameCell.appendChild(el('div', 'lf-field-name', column.name || 'Unnamed field'));
+        if (column.description) nameCell.appendChild(el('div', 'lf-field-copy', column.description));
+        row.appendChild(nameCell);
+
+        var typeCell = document.createElement('td');
+        typeCell.appendChild(el('span', 'lf-cell-code', columnTypeName(column)));
+        row.appendChild(typeCell);
+
+        var nullableCell = document.createElement('td');
+        var nullableBadges = el('div', 'lf-cell-badges');
+        nullableBadges.appendChild(el('span', 'lf-cell-badge ' + (column.nullable ? 'lf-cell-badge-muted' : 'lf-cell-badge-success'), column.nullable ? 'Yes' : 'No'));
+        nullableCell.appendChild(nullableBadges);
+        row.appendChild(nullableCell);
+
+        var pkCell = document.createElement('td');
+        if (column.isPrimaryKey || column.is_primary_key) {
+          var pkBadges = el('div', 'lf-cell-badges');
+          pkBadges.appendChild(el('span', 'lf-cell-badge lf-cell-badge-brand', 'Primary'));
+          pkCell.appendChild(pkBadges);
+        } else {
+          pkCell.appendChild(el('div', 'lf-cell-muted', '—'));
+        }
+        row.appendChild(pkCell);
+
+        metadataColumns.forEach(function (metadataColumn) {
+          var metaCell = document.createElement('td');
+          var entry = metadataValueEntry(column, metadataColumn.id);
+          if (entry) {
+            metaCell.appendChild(renderMetadataValue(entry.value, entry.type || metadataColumn.dataType));
+          } else {
+            metaCell.appendChild(el('div', 'lf-cell-muted', '—'));
+          }
+          row.appendChild(metaCell);
+        });
+
         body.appendChild(row);
       });
-      schemaTable.appendChild(body);
 
-      var contextCard = el('div', 'lf-context-card');
-      inner.appendChild(contextCard);
-      var contextHeader = el('div', 'lf-context-header');
-      contextHeader.appendChild(el('div', 'lf-sidebar-title', state.contextLoading ? 'Column Context • Loading...' : 'Column Context'));
-      if (state.selectedColumnId) contextHeader.appendChild(makeChip('Selected column'));
-      contextCard.appendChild(contextHeader);
-      var contextBody = el('div', 'lf-context-body');
-      contextCard.appendChild(contextBody);
+      if (state.contextLoading || state.columnContext || state.selectedColumnId) {
+        var contextCard = el('section', 'lf-context-card');
+        panel.appendChild(contextCard);
 
-      if (state.contextLoading) {
-        contextBody.appendChild(el('div', 'lf-cell-muted', 'Fetching business concepts, linked documents, and cross-column references...'));
-      } else if (state.columnContext && window.__renderers.column_context) {
-        window.__renderers.column_context(contextBody, state.columnContext, {}, {}, false, function () {});
-      } else if (state.columnContext) {
-        contextBody.appendChild(renderMarkdownNode('`' + safeText(state.columnContext.column && state.columnContext.column.name, 'column') + '` loaded.'));
-      } else {
-        contextBody.appendChild(el('div', 'lf-cell-muted', 'Click a schema row to inspect its full governed context.'));
+        var contextHeader = el('div', 'lf-context-header');
+        contextHeader.appendChild(el('div', 'lf-sidebar-title', state.contextLoading ? 'Column Context' : 'Field Context'));
+        var contextHeaderActions = el('div', 'lf-chip-row');
+        if (state.selectedColumnId) contextHeaderActions.appendChild(makeChip('Selected field'));
+        if (state.selectedColumnId) {
+          contextHeaderActions.appendChild(createMiniButton('Clear', function () {
+            state.selectedColumnId = null;
+            state.columnContext = null;
+            render();
+          }));
+        }
+        contextHeader.appendChild(contextHeaderActions);
+        contextCard.appendChild(contextHeader);
+
+        var contextBody = el('div', 'lf-context-body');
+        contextCard.appendChild(contextBody);
+        if (state.contextLoading) {
+          contextBody.appendChild(el('div', 'lf-cell-muted', 'Fetching business concepts, linked documents, and cross-column relationships...'));
+        } else if (state.columnContext && window.__renderers.column_context) {
+          window.__renderers.column_context(contextBody, state.columnContext, {}, {}, false, function () {});
+        } else if (state.columnContext) {
+          contextBody.appendChild(renderMarkdownNode('`' + safeText(state.columnContext.column && state.columnContext.column.name, 'field') + '` loaded.'));
+        } else {
+          contextBody.appendChild(el('div', 'lf-cell-muted', 'Select a field row to inspect its deeper governed context.'));
+        }
       }
     }
 
@@ -1900,69 +2250,119 @@
       var layout = el('div', 'lf-governance-layout');
       body.appendChild(layout);
 
-      var sourceRail = el('aside', 'lf-rail');
+      var sourceRail = el('aside', 'lf-rail ' + (state.dataSourcesCollapsed ? 'lf-rail-collapsed' : 'lf-source-rail'));
       layout.appendChild(sourceRail);
-      var sourceHeader = el('div', 'lf-sidebar-header');
-      sourceHeader.appendChild(el('div', 'lf-sidebar-title', 'Data Sources'));
-      sourceRail.appendChild(sourceHeader);
-      var sourceBody = el('div', 'lf-rail-body');
-      sourceRail.appendChild(sourceBody);
-
-      if (!dataSources().length) {
-        sourceBody.appendChild(el('div', 'lf-list-subtitle', 'No governed tables found.'));
-      } else {
-        var sourceList = el('div', 'lf-list');
-        dataSources().forEach(function (source) {
-          var button = el('button', 'lf-list-button' + (source.id === state.selectedDataSourceId ? ' lf-list-button-active' : ''));
-          button.type = 'button';
-          button.addEventListener('click', function () {
-            state.selectedDataSourceId = source.id;
-            ensureSelections();
-            render();
-            if (state.selectedColumnId) loadColumnContext(state.selectedColumnId, true);
-          });
-          button.appendChild(el('div', 'lf-list-title', source.name));
-          button.appendChild(el('div', 'lf-list-subtitle', source.sourceType + ' • ' + source.tableCount + ' tables'));
-          sourceList.appendChild(button);
+      if (state.dataSourcesCollapsed) {
+        var collapsedSources = el('div', 'lf-collapsed-rail');
+        var expandSources = el('button', 'lf-panel-toggle', '>');
+        expandSources.type = 'button';
+        expandSources.addEventListener('click', function () {
+          state.dataSourcesCollapsed = false;
+          render();
         });
-        sourceBody.appendChild(sourceList);
+        collapsedSources.appendChild(expandSources);
+        collapsedSources.appendChild(el('div', 'lf-vertical-label', 'Data Sources'));
+        sourceRail.appendChild(collapsedSources);
+      } else {
+        var sourceHeader = el('div', 'lf-sidebar-header');
+        sourceHeader.appendChild(el('div', 'lf-sidebar-title', 'Data Sources'));
+        var collapseSources = el('button', 'lf-panel-toggle', '<');
+        collapseSources.type = 'button';
+        collapseSources.addEventListener('click', function () {
+          state.dataSourcesCollapsed = true;
+          render();
+        });
+        sourceHeader.appendChild(collapseSources);
+        sourceRail.appendChild(sourceHeader);
+
+        var sourceBody = el('div', 'lf-rail-body');
+        sourceRail.appendChild(sourceBody);
+
+        if (!dataSources().length) {
+          sourceBody.appendChild(el('div', 'lf-list-subtitle', 'No data sources are available for this organization.'));
+        } else {
+          var sourceList = el('div', 'lf-list');
+          dataSources().forEach(function (source) {
+            var button = el('button', 'lf-list-button' + (source.id === state.selectedDataSourceId ? ' lf-list-button-active' : ''));
+            button.type = 'button';
+            button.addEventListener('click', function () {
+              state.selectedDataSourceId = source.id;
+              state.selectedTableId = null;
+              state.selectedColumnId = null;
+              state.columnContext = null;
+              ensureSelections();
+              render();
+            });
+            button.appendChild(el('div', 'lf-list-title', source.name));
+            button.appendChild(el('div', 'lf-list-subtitle', source.sourceType + ' • ' + source.tableCount + ' tables'));
+            sourceList.appendChild(button);
+          });
+          sourceBody.appendChild(sourceList);
+        }
       }
 
-      var tableRail = el('aside', 'lf-rail lf-rail-compact');
-      layout.appendChild(tableRail);
-      var tableHeader = el('div', 'lf-sidebar-header');
-      tableHeader.appendChild(el('div', 'lf-sidebar-title', 'Tables'));
-      tableRail.appendChild(tableHeader);
-      var tableBody = el('div', 'lf-rail-body');
-      tableRail.appendChild(tableBody);
+      if (state.selectedDataSourceId) {
+        var tableRail = el('aside', 'lf-rail lf-rail-compact ' + (state.tablesCollapsed ? 'lf-rail-collapsed' : 'lf-table-rail'));
+        layout.appendChild(tableRail);
 
-      var search = createInput('text', state.tableSearch, 'Filter tables');
-      search.addEventListener('input', function () {
-        state.tableSearch = search.value;
-        ensureSelections();
-        render();
-      });
-      tableBody.appendChild(search);
-
-      var tableList = el('div', 'lf-list');
-      tableList.style.marginTop = '12px';
-      tableBody.appendChild(tableList);
-      if (!visibleTables().length) {
-        tableList.appendChild(el('div', 'lf-list-subtitle', 'No tables match this filter.'));
-      } else {
-        visibleTables().forEach(function (table) {
-          var button = el('button', 'lf-list-button' + (table.id === state.selectedTableId ? ' lf-list-button-active' : ''));
-          button.type = 'button';
-          button.addEventListener('click', function () {
-            state.selectedTableId = table.id;
-            state.selectedColumnId = safeArray(table.columns)[0] ? safeArray(table.columns)[0].id : null;
+        if (state.tablesCollapsed) {
+          var collapsedTables = el('div', 'lf-collapsed-rail');
+          var expandTables = el('button', 'lf-panel-toggle', '>');
+          expandTables.type = 'button';
+          expandTables.addEventListener('click', function () {
+            state.tablesCollapsed = false;
             render();
-            if (state.selectedColumnId) loadColumnContext(state.selectedColumnId, true);
           });
-          button.appendChild(el('div', 'lf-list-title', table.name || 'Untitled table'));
-          button.appendChild(el('div', 'lf-list-subtitle', safeArray(table.columns).length + ' columns'));
-          tableList.appendChild(button);
-        });
+          collapsedTables.appendChild(expandTables);
+          collapsedTables.appendChild(el('div', 'lf-vertical-label', 'Tables'));
+          tableRail.appendChild(collapsedTables);
+        } else {
+          var tableHeader = el('div', 'lf-sidebar-header');
+          tableHeader.appendChild(el('div', 'lf-sidebar-title', 'Tables'));
+          var collapseTables = el('button', 'lf-panel-toggle', '<');
+          collapseTables.type = 'button';
+          collapseTables.addEventListener('click', function () {
+            state.tablesCollapsed = true;
+            render();
+          });
+          tableHeader.appendChild(collapseTables);
+          tableRail.appendChild(tableHeader);
+
+          var tableBody = el('div', 'lf-rail-body');
+          tableRail.appendChild(tableBody);
+
+          var search = createInput('text', state.tableSearch, 'Filter tables');
+          search.addEventListener('input', function () {
+            state.tableSearch = search.value;
+            state.selectedColumnId = null;
+            state.columnContext = null;
+            ensureSelections();
+            render();
+          });
+          tableBody.appendChild(search);
+
+          var tableList = el('div', 'lf-list');
+          tableList.style.marginTop = '12px';
+          tableBody.appendChild(tableList);
+          if (!visibleTables().length) {
+            tableList.appendChild(el('div', 'lf-list-subtitle', 'No tables match this filter.'));
+          } else {
+            visibleTables().forEach(function (table) {
+              var button = el('button', 'lf-list-button' + (table.id === state.selectedTableId ? ' lf-list-button-active' : ''));
+              button.type = 'button';
+              button.addEventListener('click', function () {
+                state.selectedTableId = table.id;
+                state.selectedColumnId = null;
+                state.columnContext = null;
+                state.columnSearch = '';
+                render();
+              });
+              button.appendChild(el('div', 'lf-list-title', table.name || 'Untitled table'));
+              button.appendChild(el('div', 'lf-list-subtitle', safeArray(table.columns).length + ' columns • ' + safeArray(table.metadataColumns || table.metadata_columns).length + ' metadata fields'));
+              tableList.appendChild(button);
+            });
+          }
+        }
       }
 
       var main = el('section', 'lf-governance-main');
