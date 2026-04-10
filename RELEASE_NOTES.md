@@ -1,10 +1,14 @@
-# Unreleased
+# v0.5.2
 
 ## Standalone Ludflow Pages
 
 - **feat**: Add launcher-visible standalone Ludflow renderers for `Documents`, `Data Governance`, and `Knowledge Dex`
 - **feat**: Adapt Ludflow's core documents, governance, and Knowledge Dex workflows into MCP-backed companion pages that run inside MCP Views
 - **feat**: Add app-launcher metadata and documentation for the new standalone renderer entry points
+- **feat**: Add document publish and unpublish controls to the standalone Documents workspace
+- **feat**: Add draft-aware metadata editing, draft creation, and draft promotion flows to the standalone Data Governance workspace
+- **feat**: Add an organization settings shortcut in the standalone header that opens Ludflow for the currently selected org
+- **fix**: Sync standalone renderer theming with the host MCP Views light/dark mode instead of maintaining a separate in-renderer theme toggle
 
 # v0.5.1
 

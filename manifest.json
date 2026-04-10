@@ -1,7 +1,7 @@
 {
   "name": "ludflow",
-  "version": "0.5.1",
-  "download_url": "https://github.com/DeeJanuz/ludflow-mcpviews/releases/download/v0.5.1/ludflow-plugin.zip",
+  "version": "0.5.2",
+  "download_url": "https://github.com/DeeJanuz/ludflow-mcpviews/releases/download/v0.5.2/ludflow-plugin.zip",
   "description": "Ludflow MCP Views plugin for code intelligence and knowledge management",
   "registry_index": {
     "summary": "Code intelligence, data governance, and knowledge management tools for the Ludflow platform",
