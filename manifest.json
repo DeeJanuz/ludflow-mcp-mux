@@ -68,8 +68,7 @@
     ],
     "renderer_names": [
       "ludflow_documents_home",
-      "ludflow_data_governance",
-      "ludflow_knowledge_dex"
+      "ludflow_data_governance"
     ]
   },
   "plugin_rules": [
@@ -216,23 +215,22 @@
     },
     {
       "name": "ludflow_data_governance",
-      "description": "Standalone Ludflow data governance browser with datasource navigation, table schemas, and column context",
+      "description": "Standalone Ludflow data governance workspace with datasource rails, schema tables, column context, and the embedded Knowledge Dex panel",
       "scope": "universal",
-      "rule": "Push directly to open Ludflow's standalone data governance workspace inside MCP Views. The renderer fetches organizations, data sources, tables, and column context via Ludflow MCP tools. Optionally pass organization_id, table_id, and column_id to focus the initial view.",
-      "invoke_schema": "{ \"type\": \"object\", \"properties\": { \"organization_id\": { \"type\": \"string\", \"description\": \"Organization ID to open.\" }, \"table_id\": { \"type\": \"string\", \"description\": \"Table ID to focus.\" }, \"column_id\": { \"type\": \"string\", \"description\": \"Column ID to focus.\" } } }",
-      "data_hint": "{ organization_id?: string, table_id?: string, column_id?: string }",
+      "rule": "Push directly to open Ludflow's standalone data governance workspace inside MCP Views. The renderer fetches organizations, data sources, tables, column context, organizational concepts, personal knowledge entries, and Knowledge Dex metadata through Ludflow MCP tools. Optionally pass organization_id, table_id, column_id, knowledge_open, and knowledge_tab to focus the initial view.",
+      "invoke_schema": "{ \"type\": \"object\", \"properties\": { \"organization_id\": { \"type\": \"string\", \"description\": \"Organization ID to open.\" }, \"table_id\": { \"type\": \"string\", \"description\": \"Table ID to focus.\" }, \"column_id\": { \"type\": \"string\", \"description\": \"Column ID to focus.\" }, \"knowledge_open\": { \"type\": \"boolean\", \"description\": \"Open the Knowledge Dex panel immediately.\" }, \"knowledge_tab\": { \"type\": \"string\", \"enum\": [\"org\", \"personal\"], \"description\": \"Initial Knowledge Dex tab when the panel is open.\" } } }",
+      "data_hint": "{ organization_id?: string, table_id?: string, column_id?: string, knowledge_open?: boolean, knowledge_tab?: 'org'|'personal' }",
       "standalone": true,
       "standalone_label": "Data Governance"
     },
     {
       "name": "ludflow_knowledge_dex",
-      "description": "Standalone Ludflow Knowledge Dex workspace with organizational concepts and personal entry management",
+      "description": "Legacy alias that opens the embedded Knowledge Dex view inside the Data Governance workspace",
       "scope": "universal",
-      "rule": "Push directly to open Ludflow's standalone Knowledge Dex workspace inside MCP Views. The renderer fetches organizations, organizational concepts, and personal knowledge entries via Ludflow MCP tools. Optionally pass organization_id, mode, and entry_id to focus the initial view.",
-      "invoke_schema": "{ \"type\": \"object\", \"properties\": { \"organization_id\": { \"type\": \"string\", \"description\": \"Organization ID to open.\" }, \"mode\": { \"type\": \"string\", \"enum\": [\"org\", \"personal\"], \"description\": \"Initial tab to show.\" }, \"entry_id\": { \"type\": \"string\", \"description\": \"Personal entry ID to focus.\" } } }",
-      "data_hint": "{ organization_id?: string, mode?: 'org'|'personal', entry_id?: string }",
-      "standalone": true,
-      "standalone_label": "Knowledge Dex"
+      "rule": "Invoke the combined Data Governance workspace and open the embedded Knowledge Dex panel. Optionally pass organization_id and mode to control the initial tab.",
+      "invoke_schema": "{ \"type\": \"object\", \"properties\": { \"organization_id\": { \"type\": \"string\", \"description\": \"Organization ID to open.\" }, \"mode\": { \"type\": \"string\", \"enum\": [\"org\", \"personal\"], \"description\": \"Initial Knowledge Dex tab to show.\" } } }",
+      "data_hint": "{ organization_id?: string, mode?: 'org'|'personal' }",
+      "standalone": false
     }
   ],
   "prompt_definitions": [
