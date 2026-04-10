@@ -9,9 +9,7 @@
   var PLUGIN_NAME = 'ludflow';
   var TOOL_PREFIX = 'ludflow__';
   var STYLE_ID = 'ludflow-standalone-pages-styles';
-  var THEME_STORAGE_KEY = 'ludflow-standalone-theme';
-  var DRAFT_TAB_ID = '__draft__';
-
+  var LUDFLOW_APP_ORIGIN = 'https://app.ludflow.com';
   function utils() {
     return window.__companionUtils || {};
   }
@@ -43,6 +41,8 @@
       '.lf-navtab-disabled { cursor: default; opacity: 0.65; }',
       '.lf-btn { appearance: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 36px; padding: 8px 12px; border-radius: var(--lf-radius); border: 1px solid var(--lf-border); background: var(--lf-surface); color: var(--lf-text); box-shadow: var(--lf-shadow); font: inherit; font-size: 12px; font-weight: 500; cursor: pointer; }',
       '.lf-btn:hover { background: var(--lf-brand-100); }',
+      '.lf-icon-btn { min-width: 36px; width: 36px; padding: 0; }',
+      '.lf-icon-btn svg { width: 16px; height: 16px; pointer-events: none; }',
       '.lf-btn-primary { background: var(--lf-brand-600); color: var(--lf-surface); border-color: var(--lf-brand-600); }',
       '.lf-btn-primary:hover { background: var(--lf-text); border-color: var(--lf-text); }',
       '.lf-btn-danger { color: #dc2626; border-color: rgba(220, 38, 38, 0.22); background: rgba(254, 242, 242, 0.7); }',
@@ -136,6 +136,11 @@
       '.lf-rail-collapsed { width: 48px; min-width: 48px; }',
       '.lf-collapsed-rail { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 16px 8px; }',
       '.lf-vertical-label { writing-mode: vertical-rl; transform: rotate(180deg); color: var(--lf-text-muted); font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }',
+      '.lf-stacked-rail { display: flex; flex-direction: column; gap: 18px; }',
+      '.lf-rail-section { display: flex; flex-direction: column; gap: 10px; }',
+      '.lf-rail-section + .lf-rail-section { padding-top: 18px; border-top: 1px solid var(--lf-border); }',
+      '.lf-rail-section-title { font-size: 12px; font-weight: 600; color: var(--lf-text); text-transform: uppercase; letter-spacing: 0.05em; }',
+      '.lf-rail-section-copy { color: var(--lf-text-muted); font-size: 12px; line-height: 1.45; }',
       '.lf-subsystem-row { padding: 8px 24px; border-bottom: 1px solid var(--lf-border); background: var(--lf-surface); }',
       '.lf-subsystem-buttons { display: inline-flex; align-items: center; gap: 8px; }',
       '.lf-subsystem-button { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--lf-border); border-radius: 8px; background: var(--lf-surface); color: var(--lf-text); padding: 8px 12px; font: inherit; font-size: 13px; cursor: pointer; }',
@@ -157,7 +162,15 @@
       '.lf-metadata-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 12px 16px; border-bottom: 1px solid var(--lf-border); background: var(--lf-surface-muted); }',
       '.lf-metadata-toolbar-copy { color: var(--lf-text-muted); font-size: 12px; line-height: 1.45; }',
       '.lf-metadata-toolbar-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }',
+      '.lf-toolbar-group { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }',
       '.lf-toolbar-badge { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--lf-border); background: var(--lf-surface); color: var(--lf-text); font-size: 12px; }',
+      '.lf-status-banner { border: 1px solid var(--lf-border); border-radius: 10px; background: var(--lf-surface); box-shadow: var(--lf-shadow); padding: 14px 16px; }',
+      '.lf-status-banner-brand { background: var(--lf-brand-50); border-color: var(--lf-brand-200); }',
+      '.lf-status-banner-warning { background: var(--lf-warning-bg); border-color: transparent; }',
+      '.lf-status-banner-error { background: var(--lf-error-bg); border-color: transparent; }',
+      '.lf-status-banner-title { color: var(--lf-text); font-size: 14px; font-weight: 600; }',
+      '.lf-status-banner-copy { margin-top: 4px; color: var(--lf-text-muted); font-size: 12px; line-height: 1.5; }',
+      '.lf-status-banner-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 12px; }',
       '.lf-kd-panel { border-bottom: 1px solid var(--lf-border); background: var(--lf-surface-muted); padding: 16px 24px; }',
       '.lf-kd-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }',
       '.lf-kd-tabs { display: inline-flex; align-items: center; gap: 2px; padding: 2px; border: 1px solid var(--lf-border); border-radius: 8px; background: var(--lf-surface); }',
@@ -190,6 +203,8 @@
       '.lf-cell-code { display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 8px; background: var(--lf-surface-muted); border: 1px solid var(--lf-border); color: var(--lf-text); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; }',
       '.lf-cell-link { border: none; background: transparent; padding: 0; color: var(--lf-brand-600); font: inherit; font-size: 12px; cursor: pointer; text-align: left; }',
       '.lf-cell-link:hover { text-decoration: underline; }',
+      '.lf-cell-action { margin-top: 4px; }',
+      '.lf-cell-change-note { color: var(--lf-text-muted); font-size: 11px; line-height: 1.35; }',
       '.lf-cell-input { width: 100%; min-height: 32px; padding: 6px 8px; border: 1px solid transparent; border-radius: 6px; background: transparent; color: var(--lf-text); font: inherit; }',
       '.lf-cell-input:hover { border-color: var(--lf-border); background: var(--lf-surface); }',
       '.lf-cell-input-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 12px; }',
@@ -218,13 +233,22 @@
       '.lf-modal { width: min(760px, 100%); max-height: min(720px, calc(100vh - 48px)); overflow: hidden; display: flex; flex-direction: column; border-radius: 12px; border: 1px solid var(--lf-border); background: var(--lf-surface); color: var(--lf-text); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.24); }',
       '.lf-modal-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 18px; border-bottom: 1px solid var(--lf-border); }',
       '.lf-modal-title { font-size: 16px; font-weight: 600; }',
+      '.lf-modal-copy { color: var(--lf-text-muted); font-size: 13px; line-height: 1.5; }',
       '.lf-modal-body { padding: 16px 18px; overflow: auto; display: flex; flex-direction: column; gap: 12px; }',
       '.lf-modal-footer { display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding: 16px 18px; border-top: 1px solid var(--lf-border); background: var(--lf-surface-muted); }',
       '.lf-checkbox-list { display: flex; flex-direction: column; gap: 8px; max-height: 420px; overflow: auto; }',
       '.lf-checkbox-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border: 1px solid var(--lf-border); border-radius: 8px; background: var(--lf-surface-muted); }',
       '.lf-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }',
+      '.lf-grid-1 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }',
+      '.lf-label-stack { display: flex; flex-direction: column; gap: 6px; }',
+      '.lf-label { color: var(--lf-text); font-size: 12px; font-weight: 600; }',
+      '.lf-value-editor { min-height: 144px; resize: vertical; }',
+      '.lf-diff-list { display: flex; flex-direction: column; gap: 8px; }',
+      '.lf-diff-item { padding: 10px 12px; border: 1px solid var(--lf-border); border-radius: 8px; background: var(--lf-surface-muted); }',
+      '.lf-diff-item-title { color: var(--lf-text); font-size: 13px; font-weight: 600; }',
+      '.lf-diff-item-copy { margin-top: 4px; color: var(--lf-text-muted); font-size: 12px; line-height: 1.45; }',
       '.lf-help { color: var(--lf-text-muted); font-size: 12px; line-height: 1.45; }',
-      '@media (max-width: 1200px) { .lf-governance-layout { flex-direction: column; } .lf-rail, .lf-rail-compact { width: 100%; min-width: 0; max-height: 320px; border-right: none; border-bottom: 1px solid var(--lf-border); } .lf-doc-content { grid-template-columns: minmax(0, 1fr); } .lf-doc-pane + .lf-doc-pane { border-left: none; border-top: 1px solid var(--lf-border); } }',
+      '@media (max-width: 900px) { .lf-governance-layout { flex-direction: column; } .lf-rail, .lf-rail-compact { width: 100%; min-width: 0; max-height: 320px; border-right: none; border-bottom: 1px solid var(--lf-border); } .lf-doc-content { grid-template-columns: minmax(0, 1fr); } .lf-doc-pane + .lf-doc-pane { border-left: none; border-top: 1px solid var(--lf-border); } }',
       '@media (max-width: 900px) { .lf-home-layout { grid-template-columns: 1fr; } .lf-sidebar { width: 100%; min-width: 0; max-height: 320px; border-right: none; border-bottom: 1px solid var(--lf-border); } }',
       '@media (max-width: 720px) { .lf-topnav, .lf-breadcrumbs, .lf-subsystem-row, .lf-kd-panel, .lf-metadata-inner { padding-left: 16px; padding-right: 16px; } .lf-notice { margin-left: 16px; margin-right: 16px; } .lf-sidebar-body, .lf-rail-body, .lf-doc-pane, .lf-panel-stack { padding: 12px; } .lf-doc-header, .lf-doc-tabs, .lf-sidebar-header, .lf-metadata-toolbar { padding-left: 12px; padding-right: 12px; } .lf-grid-2 { grid-template-columns: 1fr; } .lf-topnav-center { width: 100%; justify-content: flex-start; } .lf-hero-card { padding: 16px; } }'
     ].join('\n');
@@ -274,6 +298,16 @@
   function createButton(label, kind, handler) {
     var button = el('button', 'lf-btn' + (kind ? ' lf-btn-' + kind : ''), label);
     button.type = 'button';
+    if (handler) button.addEventListener('click', handler);
+    return button;
+  }
+
+  function createIconButton(label, svgMarkup, handler) {
+    var button = el('button', 'lf-btn lf-icon-btn');
+    button.type = 'button';
+    button.setAttribute('aria-label', label);
+    button.title = label;
+    button.innerHTML = svgMarkup;
     if (handler) button.addEventListener('click', handler);
     return button;
   }
@@ -447,6 +481,38 @@
     return window.__TAURI__.core.invoke(command, args || {});
   }
 
+  function ludflowOrganizationSettingsUrl(orgId) {
+    return LUDFLOW_APP_ORIGIN + '/settings/organization' + (orgId ? '?org=' + encodeURIComponent(orgId) : '');
+  }
+
+  function openExternalUrl(url) {
+    if (!url) return Promise.resolve();
+
+    var tauriShell = window.__TAURI__ && window.__TAURI__.shell;
+    if (tauriShell && typeof tauriShell.open === 'function') {
+      return Promise.resolve(tauriShell.open(url));
+    }
+
+    if (window.__TAURI_INTERNALS__ && typeof window.__TAURI_INTERNALS__.invoke === 'function') {
+      return Promise.resolve(
+        window.__TAURI_INTERNALS__.invoke('plugin:shell|open', { path: url })
+      );
+    }
+
+    try {
+      var popup = window.open(url, '_blank', 'noopener,noreferrer');
+      if (popup) {
+        try {
+          popup.opener = null;
+        } catch (_error) {}
+        return Promise.resolve();
+      }
+    } catch (_error) {}
+
+    window.location.href = url;
+    return Promise.resolve();
+  }
+
   function withOrg(state, args) {
     var next = cloneObject(args || {});
     if (state.currentOrgId) next.organization_id = state.currentOrgId;
@@ -494,27 +560,56 @@
 
   function detectHostTheme() {
     try {
-      if (utils().isDark) return 'dark';
-      if (document.documentElement.getAttribute('data-theme') === 'dark') return 'dark';
+      var attrTheme = document.documentElement.getAttribute('data-theme');
+      if (attrTheme === 'dark' || attrTheme === 'light') return attrTheme;
+      var storedTheme = window.localStorage.getItem('mcpviews-theme');
+      if (storedTheme === 'dark' || storedTheme === 'light') return storedTheme;
       if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
     } catch (_error) {}
     return 'light';
   }
 
-  function readTheme() {
-    try {
-      var storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
-      if (storedTheme === 'light' || storedTheme === 'dark') return storedTheme;
-    } catch (_error) {
-      return detectHostTheme();
-    }
-    return detectHostTheme();
+  function syncThemeState(state) {
+    var nextTheme = detectHostTheme();
+    var changed = state.theme !== nextTheme;
+    state.theme = nextTheme;
+    return changed;
   }
 
-  function persistTheme(theme) {
-    try {
-      window.localStorage.setItem(THEME_STORAGE_KEY, theme);
-    } catch (_error) {}
+  function observeHostTheme(container, state, rerender) {
+    if (container.__lfThemeSync && typeof container.__lfThemeSync.disconnect === 'function') {
+      container.__lfThemeSync.disconnect();
+    }
+
+    var root = document.documentElement;
+    var mediaQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+    var observer = typeof MutationObserver !== 'undefined' && root
+      ? new MutationObserver(function () {
+        if (syncThemeState(state)) rerender();
+      })
+      : null;
+    if (observer) {
+      observer.observe(root, {
+        attributes: true,
+        attributeFilter: ['data-theme']
+      });
+    }
+
+    var handleMediaChange = function () {
+      if (syncThemeState(state)) rerender();
+    };
+    if (mediaQuery && typeof mediaQuery.addEventListener === 'function') {
+      mediaQuery.addEventListener('change', handleMediaChange);
+    }
+
+    container.__lfThemeSync = {
+      disconnect: function () {
+        if (observer) observer.disconnect();
+        if (mediaQuery && typeof mediaQuery.removeEventListener === 'function') {
+          mediaQuery.removeEventListener('change', handleMediaChange);
+        }
+      }
+    };
   }
 
   function folderName(folderId, folders) {
@@ -631,6 +726,7 @@
   function renderWorkspaceShell(container, state, config, renderBody, renderOverlay) {
     ensureStyles();
     clear(container);
+    syncThemeState(state);
 
     var root = el('div', 'lf-shell lf-theme-' + (state.theme || 'light'));
     container.appendChild(root);
@@ -691,18 +787,33 @@
     nav.appendChild(navCenter);
 
     var navRight = el('div', 'lf-topnav-right');
-    var themeButton = createButton(state.theme === 'dark' ? 'Light Theme' : 'Dark Theme', '', function () {
-      state.theme = state.theme === 'dark' ? 'light' : 'dark';
-      persistTheme(state.theme);
-      config.onThemeChange();
-    });
-    navRight.appendChild(themeButton);
+    var org = currentOrg(state);
+    if (org && org.id) {
+      var settingsButton = createIconButton(
+        'Open organization settings',
+        [
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">',
+          '<circle cx="12" cy="12" r="3"></circle>',
+          '<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.1a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.1a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>',
+          '</svg>'
+        ].join(''),
+        function () {
+          state.notice = null;
+          state.error = '';
+          openExternalUrl(ludflowOrganizationSettingsUrl(org.id))
+            .catch(function (error) {
+              state.error = error.message || 'Failed to open organization settings.';
+              renderWorkspaceShell(container, state, config, renderBody, renderOverlay);
+            });
+        }
+      );
+      navRight.appendChild(settingsButton);
+    }
 
     var refreshButton = createButton(state.loading ? 'Refreshing...' : 'Refresh', '', config.onRefresh);
     refreshButton.disabled = !!state.loading;
     navRight.appendChild(refreshButton);
 
-    var org = currentOrg(state);
     if (org && org.has_mcpviews_token === false) {
       var connectButton = createButton('Connect Org', 'primary', function () {
         state.loading = true;
@@ -761,11 +872,12 @@
 
   function createDocumentsRenderer(container, data) {
     var state = {
-      theme: data.theme || readTheme(),
+      theme: detectHostTheme(),
       orgs: [],
       currentOrgId: data.organization_id || null,
       initializing: true,
       loading: false,
+      actionDocumentId: null,
       notice: null,
       error: '',
       folders: [],
@@ -780,6 +892,13 @@
 
     function folderTree() {
       return treeifyFolders(state.folders);
+    }
+
+    function selectedDocumentItem() {
+      for (var i = 0; i < state.documents.length; i += 1) {
+        if (state.documents[i].id === state.selectedDocumentId) return state.documents[i];
+      }
+      return null;
     }
 
     function documentFolderId(documentItem) {
@@ -951,6 +1070,72 @@
           state.loading = false;
           state.initializing = false;
           state.error = error.message || 'Failed to load document.';
+          render();
+        });
+    }
+
+    function publishLatestDocument(documentItem) {
+      if (!documentItem || !documentItem.id) return;
+      state.actionDocumentId = documentItem.id;
+      state.notice = null;
+      state.error = '';
+      render();
+
+      callTool('publish_document', withOrg(state, {
+        action: 'list_versions',
+        document_id: documentItem.id
+      }))
+        .then(function (payload) {
+          var versions = safeArray(payload.data || payload).slice().sort(function (left, right) {
+            return Number(left.versionNumber || 0) - Number(right.versionNumber || 0);
+          });
+          if (!versions.length) throw new Error('No publishable versions are available for this document.');
+          var latestVersion = versions[versions.length - 1];
+          return callTool('publish_document', withOrg(state, {
+            action: 'publish',
+            document_id: documentItem.id,
+            version_id: latestVersion.id
+          })).then(function () {
+            return latestVersion;
+          });
+        })
+        .then(function (latestVersion) {
+          state.actionDocumentId = null;
+          state.notice = {
+            kind: 'success',
+            text: 'Published "' + safeText(documentItem.title, 'Untitled Document') + '" using version ' + safeText(latestVersion.versionNumber, 'latest') + '.'
+          };
+          return refreshIndex();
+        })
+        .catch(function (error) {
+          state.actionDocumentId = null;
+          state.error = error.message || 'Failed to publish document.';
+          render();
+        });
+    }
+
+    function unpublishDocument(documentItem) {
+      if (!documentItem || !documentItem.id) return;
+      state.actionDocumentId = documentItem.id;
+      state.notice = null;
+      state.error = '';
+      render();
+
+      callTool('publish_document', withOrg(state, {
+        action: 'unpublish',
+        document_id: documentItem.id
+      }))
+        .then(function () {
+          state.actionDocumentId = null;
+          state.notice = {
+            kind: 'success',
+            text: 'Unpublished "' + safeText(documentItem.title, 'Untitled Document') + '".'
+          };
+          return refreshIndex();
+        })
+        .catch(function (error) {
+          state.actionDocumentId = null;
+          state.error = error.message || 'Failed to unpublish document.';
           render();
         });
     }
@@ -1128,10 +1313,31 @@
       toolbar.appendChild(toolbarLeft);
 
       var toolbarRight = el('div', 'lf-browser-toolbar-right');
-      if (state.selectedDocumentId) {
+      var activeDocument = selectedDocumentItem();
+      if (activeDocument) {
         toolbarRight.appendChild(createButton('Open Selected', 'primary', function () {
           openDocument(state.selectedDocumentId);
         }));
+        var publishSelectedButton = createButton(
+          state.actionDocumentId === activeDocument.id ? 'Publishing...' : 'Publish Latest',
+          '',
+          function () {
+            publishLatestDocument(activeDocument);
+          }
+        );
+        publishSelectedButton.disabled = state.actionDocumentId === activeDocument.id;
+        toolbarRight.appendChild(publishSelectedButton);
+        if (safeText(activeDocument.status).toLowerCase() === 'published') {
+          var unpublishSelectedButton = createButton(
+            state.actionDocumentId === activeDocument.id ? 'Working...' : 'Unpublish',
+            '',
+            function () {
+              unpublishDocument(activeDocument);
+            }
+          );
+          unpublishSelectedButton.disabled = state.actionDocumentId === activeDocument.id;
+          toolbarRight.appendChild(unpublishSelectedButton);
+        }
       }
       toolbar.appendChild(toolbarRight);
 
@@ -1147,7 +1353,7 @@
       summary.appendChild(el(
         'div',
         'lf-filter-note',
-        'Status filtering is available now. Created and updated sorting is included, but some Ludflow MCP document timestamps are still sparse, so date-based ordering may be approximate until those fields are fully serialized.'
+        'Status filtering is available now, and document cards can publish the latest saved version or unpublish directly through MCP. Created and updated sorting is included, but some Ludflow MCP document timestamps are still sparse, so date-based ordering may be approximate until those fields are fully serialized.'
       ));
 
       var results = el('div', 'lf-browser-results');
@@ -1184,6 +1390,26 @@
             openDocument(documentItem.id);
           });
           actions.appendChild(openButton);
+          var publishButton = createButton(
+            state.actionDocumentId === documentItem.id ? 'Publishing...' : 'Publish Latest',
+            '',
+            function () {
+              publishLatestDocument(documentItem);
+            }
+          );
+          publishButton.disabled = state.actionDocumentId === documentItem.id;
+          actions.appendChild(publishButton);
+          if (safeText(documentItem.status).toLowerCase() === 'published') {
+            var unpublishButton = createButton(
+              state.actionDocumentId === documentItem.id ? 'Working...' : 'Unpublish',
+              '',
+              function () {
+                unpublishDocument(documentItem);
+              }
+            );
+            unpublishButton.disabled = state.actionDocumentId === documentItem.id;
+            actions.appendChild(unpublishButton);
+          }
           header.appendChild(actions);
 
           if (documentItem.user && (documentItem.user.name || documentItem.user.email)) {
@@ -1197,7 +1423,6 @@
       renderWorkspaceShell(container, state, {
         activeNav: 'docs',
         onRefresh: refreshIndex,
-        onThemeChange: render,
         onOrgChange: function () {
           state.selectedDocumentId = null;
           state.selectedFolderId = null;
@@ -1205,6 +1430,8 @@
         }
       }, renderBody);
     }
+
+    observeHostTheme(container, state, render);
 
     loadOrganizations(state, state.currentOrgId)
       .then(function () {
@@ -1220,18 +1447,24 @@
 
   function createDataGovernanceRenderer(container, data) {
     var state = {
-      theme: data.theme || readTheme(),
+      theme: detectHostTheme(),
       orgs: [],
       currentOrgId: data.organization_id || null,
       initializing: true,
       loading: false,
       contextLoading: false,
+      draftsLoading: false,
+      draftDiffLoading: false,
+      draftActionLoading: false,
       notice: null,
       error: '',
       tables: [],
       selectedDataSourceId: data.data_source_id || null,
       selectedTableId: data.table_id || null,
       selectedColumnId: data.column_id || null,
+      selectedDraftId: data.draft_id || null,
+      drafts: [],
+      draftDiff: null,
       columnContext: null,
       tableSearch: '',
       columnSearch: '',
@@ -1248,6 +1481,13 @@
         name: '',
         type: 'TEXT'
       },
+      draftCreateModal: {
+        open: false,
+        title: '',
+        description: ''
+      },
+      draftProposeModalOpen: false,
+      cellEditor: null,
       composer: null,
       dataSourcesCollapsed: false,
       tablesCollapsed: false
@@ -1302,6 +1542,38 @@
       return safeArray(table && (table.metadataColumns || table.metadata_columns));
     }
 
+    function selectedDraft() {
+      for (var i = 0; i < state.drafts.length; i += 1) {
+        if (state.drafts[i].id === state.selectedDraftId) return state.drafts[i];
+      }
+      return null;
+    }
+
+    function isDraftReadOnly() {
+      var draft = selectedDraft();
+      return !!draft && draft.status !== 'DRAFT';
+    }
+
+    function activeMetadataColumns() {
+      var columns = selectedMetadataColumns().slice();
+      var seen = {};
+      columns.forEach(function (column) {
+        if (column && column.id) seen[column.id] = true;
+      });
+      safeArray(state.draftDiff && state.draftDiff.newColumns).forEach(function (column) {
+        if (!column || !column.id || seen[column.id]) return;
+        seen[column.id] = true;
+        columns.push({
+          id: column.id,
+          name: column.name,
+          dataType: column.dataType,
+          isRequired: !!column.isRequired,
+          isSystemColumn: false
+        });
+      });
+      return columns;
+    }
+
     function filteredColumns() {
       var query = safeText(state.columnSearch).trim().toLowerCase();
       return selectedTableColumns().filter(function (column) {
@@ -1312,12 +1584,54 @@
       });
     }
 
-    function metadataValueEntry(column, metadataColumnId) {
+    function productionMetadataValueEntry(column, metadataColumnId) {
       var values = safeArray(column && column.metadataValues);
       for (var i = 0; i < values.length; i += 1) {
         if (values[i].metadataColumnDefinitionId === metadataColumnId) return values[i];
       }
       return null;
+    }
+
+    function draftChangeMap() {
+      var map = {};
+      safeArray(state.draftDiff && state.draftDiff.changes).forEach(function (change) {
+        if (!change || !change.columnId || !change.metadataColumnId) return;
+        map[change.columnId] = map[change.columnId] || {};
+        map[change.columnId][change.metadataColumnId] = change;
+      });
+      return map;
+    }
+
+    function metadataCellState(column, metadataColumn) {
+      var change = draftChangeMap()[column.id] && draftChangeMap()[column.id][metadataColumn.id];
+      if (change) {
+        return {
+          value: change.draftValue,
+          displayValue: change.draftDisplayValue,
+          type: change.metadataColumnDataType || metadataColumn.dataType,
+          source: 'draft',
+          changeType: change.changeType
+        };
+      }
+
+      var productionEntry = productionMetadataValueEntry(column, metadataColumn.id);
+      if (productionEntry) {
+        return {
+          value: productionEntry.value,
+          displayValue: productionEntry.displayValue,
+          type: productionEntry.type || metadataColumn.dataType,
+          source: 'production',
+          changeType: 'unchanged'
+        };
+      }
+
+      return {
+        value: null,
+        displayValue: null,
+        type: metadataColumn.dataType,
+        source: 'empty',
+        changeType: 'unchanged'
+      };
     }
 
     function metadataValueCount(table) {
@@ -1359,7 +1673,53 @@
       return String(item);
     }
 
-    function renderMetadataValue(value, type) {
+    function valueToEditorText(value, type) {
+      if (value == null) return '';
+      if (type === 'DATE') return String(value).slice(0, 10);
+      if (type === 'MULTISELECT' && Array.isArray(value)) return value.join(', ');
+      if (type === 'USER_REFERENCE' && typeof value === 'string') return value;
+      if (typeof value === 'string') return value;
+      if (Array.isArray(value)) return JSON.stringify(value, null, 2);
+      if (typeof value === 'object') return JSON.stringify(value, null, 2);
+      return String(value);
+    }
+
+    function parseEditorValue(rawValue, type) {
+      var text = String(rawValue == null ? '' : rawValue);
+      var trimmed = text.trim();
+
+      if (type === 'DATE') return trimmed || null;
+      if (type === 'MULTISELECT') {
+        if (!trimmed) return [];
+        return text.split(/[\n,]/).map(function (item) { return item.trim(); }).filter(Boolean);
+      }
+      if (type === 'USER_REFERENCE') return trimmed || null;
+      if (type === 'COLUMN_REFERENCE' || type === 'CODE_REFERENCE' || type === 'KNOWLEDGE_DEX_REFERENCE' || type === 'DATA_LAKE_REFERENCE' || type === 'DOCUMENT_REFERENCE') {
+        if (!trimmed) return [];
+        try {
+          return JSON.parse(text);
+        } catch (_error) {
+          return text.split(/[\n,]/).map(function (item) { return item.trim(); }).filter(Boolean);
+        }
+      }
+      return trimmed ? text : null;
+    }
+
+    function editorHelpText(type) {
+      if (type === 'DATE') return 'Use YYYY-MM-DD format.';
+      if (type === 'MULTISELECT') return 'Enter comma-separated or line-separated values.';
+      if (type === 'USER_REFERENCE') return 'Enter the Ludflow user ID for the owner you want to assign.';
+      if (type === 'COLUMN_REFERENCE' || type === 'CODE_REFERENCE' || type === 'KNOWLEDGE_DEX_REFERENCE' || type === 'DATA_LAKE_REFERENCE' || type === 'DOCUMENT_REFERENCE') {
+        return 'Enter JSON for structured values, or comma-separated IDs for simple reference lists.';
+      }
+      return 'Leave blank to clear this draft value.';
+    }
+
+    function renderMetadataValue(value, type, displayValue) {
+      if (displayValue) {
+        return el('div', 'lf-cell-text', String(displayValue));
+      }
+
       if (value == null || value === '' || (Array.isArray(value) && !value.length)) {
         return el('div', 'lf-cell-muted', '—');
       }
@@ -1455,6 +1815,219 @@
         state.selectedColumnId = null;
         state.columnContext = null;
       }
+    }
+
+    function resetDraftState() {
+      state.selectedDraftId = null;
+      state.drafts = [];
+      state.draftDiff = null;
+      state.draftsLoading = false;
+      state.draftDiffLoading = false;
+      state.draftActionLoading = false;
+      state.draftCreateModal = {
+        open: false,
+        title: '',
+        description: ''
+      };
+      state.draftProposeModalOpen = false;
+      state.cellEditor = null;
+    }
+
+    function refreshDraftDiff(silent) {
+      if (!state.selectedDraftId) {
+        state.draftDiff = null;
+        state.draftDiffLoading = false;
+        if (!silent) render();
+        return Promise.resolve(null);
+      }
+
+      state.draftDiffLoading = true;
+      if (!silent) render();
+      return callTool('manage_data_draft', withOrg(state, {
+        action: 'get_diff',
+        draft_id: state.selectedDraftId
+      }))
+        .then(function (payload) {
+          state.draftDiff = payload.data || payload;
+          state.draftDiffLoading = false;
+          render();
+          return state.draftDiff;
+        })
+        .catch(function (error) {
+          state.draftDiffLoading = false;
+          state.error = error.message || 'Failed to load draft changes.';
+          render();
+          return null;
+        });
+    }
+
+    function refreshDrafts(silent) {
+      if (!state.selectedTableId || !orgHasToken(state)) {
+        resetDraftState();
+        if (!silent) render();
+        return Promise.resolve([]);
+      }
+
+      state.draftsLoading = true;
+      if (!silent) render();
+      return callTool('manage_data_draft', withOrg(state, {
+        action: 'list_drafts',
+        table_id: state.selectedTableId
+      }))
+        .then(function (payload) {
+          var info = payload.data || payload;
+          state.drafts = safeArray(info.drafts || info);
+          state.draftsLoading = false;
+          if (state.selectedDraftId && !state.drafts.some(function (draft) { return draft.id === state.selectedDraftId; })) {
+            state.selectedDraftId = null;
+            state.draftDiff = null;
+            state.cellEditor = null;
+            state.draftProposeModalOpen = false;
+          }
+          render();
+          if (state.selectedDraftId) return refreshDraftDiff(true);
+          return state.drafts;
+        })
+        .catch(function (error) {
+          state.draftsLoading = false;
+          state.error = error.message || 'Failed to load table drafts.';
+          render();
+          return [];
+        });
+    }
+
+    function selectDraft(draftId) {
+      state.selectedDraftId = draftId || null;
+      state.cellEditor = null;
+      state.draftProposeModalOpen = false;
+      if (!state.selectedDraftId) {
+        state.draftDiff = null;
+        render();
+        return;
+      }
+      render();
+      refreshDraftDiff(true);
+    }
+
+    function openDraftEditor(column, metadataColumn) {
+      if (!state.selectedDraftId || isDraftReadOnly()) return;
+      var cell = metadataCellState(column, metadataColumn);
+      state.cellEditor = {
+        columnId: column.id,
+        columnName: column.name || 'Unnamed field',
+        metadataColumnId: metadataColumn.id,
+        metadataColumnName: metadataColumn.name || 'Metadata',
+        dataType: metadataColumn.dataType || cell.type || 'TEXT',
+        value: valueToEditorText(cell.value, metadataColumn.dataType || cell.type || 'TEXT'),
+        error: ''
+      };
+      render();
+    }
+
+    function saveDraftEditorValue() {
+      if (!state.cellEditor || !state.selectedDraftId) return;
+
+      var parsedValue;
+      try {
+        parsedValue = parseEditorValue(state.cellEditor.value, state.cellEditor.dataType);
+      } catch (error) {
+        state.cellEditor.error = error.message || 'Invalid value.';
+        render();
+        return;
+      }
+
+      state.draftActionLoading = true;
+      state.cellEditor.error = '';
+      render();
+      callTool('manage_data_draft', withOrg(state, {
+        action: 'set_value',
+        draft_id: state.selectedDraftId,
+        column_id: state.cellEditor.columnId,
+        metadata_column_id: state.cellEditor.metadataColumnId,
+        value: parsedValue
+      }))
+        .then(function () {
+          state.draftActionLoading = false;
+          state.notice = {
+            kind: 'success',
+            text: 'Updated draft value for ' + safeText(state.cellEditor.metadataColumnName, 'metadata field') + '.'
+          };
+          state.cellEditor = null;
+          return refreshDraftDiff(true);
+        })
+        .catch(function (error) {
+          state.draftActionLoading = false;
+          if (state.cellEditor) state.cellEditor.error = error.message || 'Failed to update draft value.';
+          render();
+        });
+    }
+
+    function createDraft() {
+      if (!state.selectedTableId) return;
+      state.draftActionLoading = true;
+      state.error = '';
+      render();
+      callTool('manage_data_draft', withOrg(state, {
+        action: 'create',
+        table_id: state.selectedTableId,
+        title: safeText(state.draftCreateModal.title).trim() || undefined,
+        description: safeText(state.draftCreateModal.description).trim() || undefined
+      }))
+        .then(function (payload) {
+          var info = payload.data || payload;
+          state.notice = {
+            kind: 'success',
+            text: 'Created draft "' + safeText(info.title, 'Untitled Draft') + '".'
+          };
+          state.draftActionLoading = false;
+          state.draftCreateModal = { open: false, title: '', description: '' };
+          state.selectedDraftId = info.id || null;
+          return refreshDrafts(true);
+        })
+        .then(function () {
+          if (state.selectedDraftId) return refreshDraftDiff(true);
+          return null;
+        })
+        .catch(function (error) {
+          state.draftActionLoading = false;
+          state.error = error.message || 'Failed to create draft.';
+          render();
+        });
+    }
+
+    function openProposeDraftModal() {
+      if (!state.selectedDraftId) return;
+      state.draftProposeModalOpen = true;
+      render();
+      refreshDraftDiff(true);
+    }
+
+    function promoteDraft() {
+      if (!state.selectedDraftId) return;
+      state.draftActionLoading = true;
+      state.error = '';
+      render();
+      callTool('manage_data_draft', withOrg(state, {
+        action: 'propose',
+        draft_id: state.selectedDraftId
+      }))
+        .then(function () {
+          state.notice = {
+            kind: 'success',
+            text: 'Promoted draft for review in Ludflow.'
+          };
+          state.draftActionLoading = false;
+          state.draftProposeModalOpen = false;
+          return refreshDrafts(true);
+        })
+        .then(function () {
+          return refreshDraftDiff(true);
+        })
+        .catch(function (error) {
+          state.draftActionLoading = false;
+          state.error = error.message || 'Failed to promote draft.';
+          render();
+        });
     }
 
     function loadColumnContext(columnId, silent) {
@@ -1553,8 +2126,11 @@
           render();
           prefetchPersonalMappings();
 
-          if (state.selectedColumnId) return loadColumnContext(state.selectedColumnId, true);
-          return null;
+          var tasks = [];
+          if (state.selectedTableId) tasks.push(refreshDrafts(true));
+          else resetDraftState();
+          if (state.selectedColumnId) tasks.push(loadColumnContext(state.selectedColumnId, true));
+          return Promise.all(tasks);
         })
         .catch(function (error) {
           state.loading = false;
@@ -2052,6 +2628,41 @@
       renderKnowledgeTable(panel);
     }
 
+    function renderGovernanceBanner(kind, title, copy, actionsBuilder) {
+      var banner = el('section', 'lf-status-banner lf-status-banner-' + kind);
+      banner.appendChild(el('div', 'lf-status-banner-title', title));
+      banner.appendChild(el('div', 'lf-status-banner-copy', copy));
+      if (actionsBuilder) {
+        var actions = el('div', 'lf-status-banner-actions');
+        actionsBuilder(actions);
+        if (actions.childNodes.length) banner.appendChild(actions);
+      }
+      return banner;
+    }
+
+    function renderGovernanceCell(column, metadataColumn) {
+      var cellState = metadataCellState(column, metadataColumn);
+      var wrap = el('div', 'lf-cell-stack');
+      wrap.appendChild(renderMetadataValue(cellState.value, cellState.type, cellState.displayValue));
+
+      if (cellState.source === 'draft') {
+        wrap.appendChild(el('div', 'lf-cell-change-note', cellState.changeType === 'added' ? 'Draft-only value' : 'Modified in draft'));
+      }
+
+      if (state.selectedDraftId && !isDraftReadOnly()) {
+        var actionWrap = el('div', 'lf-cell-action');
+        var editButton = createMiniButton(cellState.value == null || cellState.value === '' ? 'Set value' : 'Edit');
+        editButton.addEventListener('click', function (event) {
+          event.stopPropagation();
+          openDraftEditor(column, metadataColumn);
+        });
+        actionWrap.appendChild(editButton);
+        wrap.appendChild(actionWrap);
+      }
+
+      return wrap;
+    }
+
     function renderGovernanceMain(main) {
       if (!state.selectedDataSourceId) {
         renderEmptyScreen(main, 'Select a data source to get started', 'Choose a data source from the left rail to browse its governed tables.');
@@ -2064,8 +2675,11 @@
 
       var table = selectedTable();
       var source = tableDataSource(table);
-      var metadataColumns = selectedMetadataColumns();
+      var metadataColumns = activeMetadataColumns();
       var visibleColumnRows = filteredColumns();
+      var draft = selectedDraft();
+      var draftSummary = state.draftDiff && state.draftDiff.summary ? state.draftDiff.summary : null;
+      var draftChangeCount = draftSummary ? Number(draftSummary.added || 0) + Number(draftSummary.modified || 0) + Number(draftSummary.newColumns || 0) : 0;
 
       var panel = el('div', 'lf-panel-stack');
       main.appendChild(panel);
@@ -2081,36 +2695,115 @@
       intro.appendChild(el('div', 'lf-hero-copy', safeArray(table.columns).length + ' column' + (safeArray(table.columns).length === 1 ? '' : 's') + ' across ' + metadataColumns.length + ' metadata field' + (metadataColumns.length === 1 ? '' : 's') + '.'));
       heroTop.appendChild(intro);
 
+      var headerControls = el('div', 'lf-toolbar-group');
+      var draftSelect = createSelect(
+        [{ value: '', label: 'Production (Live)' }].concat(state.drafts.map(function (item) {
+          return {
+            value: item.id,
+            label: (item.title || 'Untitled Draft') + ' • ' + safeText(item.status, 'DRAFT')
+          };
+        })),
+        state.selectedDraftId || ''
+      );
+      draftSelect.disabled = state.draftsLoading || !state.selectedTableId;
+      draftSelect.addEventListener('change', function () {
+        selectDraft(draftSelect.value || null);
+      });
+      headerControls.appendChild(draftSelect);
+      var createDraftButton = createButton(state.draftActionLoading && state.draftCreateModal.open ? 'Creating...' : 'Create Draft', '', function () {
+        state.draftCreateModal.open = true;
+        render();
+      });
+      createDraftButton.disabled = !state.selectedTableId || state.draftActionLoading;
+      headerControls.appendChild(createDraftButton);
+      heroTop.appendChild(headerControls);
+
       var chips = el('div', 'lf-chip-row');
       chips.appendChild(makeChip(source.sourceType || source.source_type || 'Data Source'));
-      chips.appendChild(makeChip('Production Metadata'));
+      chips.appendChild(makeChip(draft ? 'Draft Workspace' : 'Production Metadata'));
       chips.appendChild(makeChip(safeText(source.name, 'Data Source')));
-      heroTop.appendChild(chips);
+      if (draft) chips.appendChild(makeChip(safeText(draft.status, 'DRAFT')));
+      hero.appendChild(chips);
 
       var statRow = el('div', 'lf-stat-row');
       statRow.appendChild(el('div', 'lf-stat-pill lf-stat-pill-strong', safeArray(table.columns).length + ' fields'));
       statRow.appendChild(el('div', 'lf-stat-pill', metadataColumns.length + ' metadata columns'));
       statRow.appendChild(el('div', 'lf-stat-pill', metadataValueCount(table) + ' populated values'));
       statRow.appendChild(el('div', 'lf-stat-pill', 'Source: ' + safeText(source.name, 'Unknown')));
+      if (draft) {
+        statRow.appendChild(el('div', 'lf-stat-pill lf-stat-pill-strong', draftChangeCount + ' pending draft change' + (draftChangeCount === 1 ? '' : 's')));
+      }
       hero.appendChild(statRow);
 
-      var banner = el('div', 'lf-meta-banner');
-      banner.appendChild(el('div', 'lf-meta-banner-dot'));
-      var bannerCopy = el('div');
-      bannerCopy.appendChild(el('div', 'lf-meta-banner-title', 'Production metadata view'));
-      bannerCopy.appendChild(el('div', 'lf-meta-banner-copy', 'This mirrors Ludflow’s main governance workflow: data source rail, table rail, and a metadata-first table view. Click a field row to load governed column context below.'));
-      banner.appendChild(bannerCopy);
-      panel.appendChild(banner);
+      if (!draft) {
+        panel.appendChild(renderGovernanceBanner(
+          'brand',
+          'Production metadata (read-only)',
+          'This mirrors Ludflow’s governance workflow. Create a draft to make changes, then promote it for review when you are ready.',
+          function (actions) {
+            var button = createButton('Create Draft', 'primary', function () {
+              state.draftCreateModal.open = true;
+              render();
+            });
+            button.disabled = !state.selectedTableId || state.draftActionLoading;
+            actions.appendChild(button);
+          }
+        ));
+      } else if (draft.status === 'DRAFT') {
+        panel.appendChild(renderGovernanceBanner(
+          'brand',
+          'Editing Draft: ' + safeText(draft.title, 'Untitled Draft'),
+          safeText(draft.description, 'Changes in this draft stay isolated from production until they are promoted for review in Ludflow.'),
+          function (actions) {
+            var promoteButton = createButton(state.draftActionLoading ? 'Promoting...' : 'Promote Draft', 'primary', openProposeDraftModal);
+            promoteButton.disabled = state.draftActionLoading || state.draftDiffLoading;
+            actions.appendChild(promoteButton);
+            actions.appendChild(createButton('Exit Draft', '', function () {
+              selectDraft(null);
+            }));
+          }
+        ));
+      } else if (draft.status === 'PROPOSED') {
+        panel.appendChild(renderGovernanceBanner(
+          'warning',
+          'Draft Pending Review',
+          'This draft is read-only here until it is reviewed in the main Ludflow app.',
+          function (actions) {
+            actions.appendChild(createButton('Exit Draft', '', function () {
+              selectDraft(null);
+            }));
+          }
+        ));
+      } else {
+        panel.appendChild(renderGovernanceBanner(
+          'error',
+          'Draft Status: ' + safeText(draft.status, 'Unknown'),
+          'This draft is currently read-only in MCP Views. Continue its lifecycle from the full Ludflow application.',
+          function (actions) {
+            actions.appendChild(createButton('Exit Draft', '', function () {
+              selectDraft(null);
+            }));
+          }
+        ));
+      }
 
       var metadataCard = el('section', 'lf-metadata-card');
       panel.appendChild(metadataCard);
 
       var toolbar = el('div', 'lf-metadata-toolbar');
-      toolbar.appendChild(el('div', 'lf-metadata-toolbar-copy', metadataColumns.length
-        ? 'Scroll horizontally to inspect dynamic metadata columns.'
-        : 'No metadata columns are defined for this table yet. The fixed schema fields still match Ludflow’s table layout.'));
+      toolbar.appendChild(el('div', 'lf-metadata-toolbar-copy', draft
+        ? 'You are viewing draft-aware values overlaid on top of production metadata. Edit cells to update the selected draft.'
+        : (metadataColumns.length
+          ? 'Scroll horizontally to inspect dynamic metadata columns.'
+          : 'No metadata columns are defined for this table yet. The fixed schema fields still match Ludflow’s table layout.')));
       var toolbarRight = el('div', 'lf-metadata-toolbar-right');
+      toolbarRight.appendChild(el('div', 'lf-toolbar-badge', draft
+        ? (isDraftReadOnly() ? 'Draft is read-only' : 'Draft is editable')
+        : 'Production view'));
       toolbarRight.appendChild(el('div', 'lf-toolbar-badge', state.selectedColumnId ? 'Context loaded' : 'Click row for context'));
+      if (draft) {
+        toolbarRight.appendChild(el('div', 'lf-toolbar-badge', draftChangeCount + ' changes'));
+      }
       var search = createInput('text', state.columnSearch, 'Filter fields');
       search.style.width = '220px';
       search.addEventListener('input', function () {
@@ -2184,12 +2877,7 @@
 
         metadataColumns.forEach(function (metadataColumn) {
           var metaCell = document.createElement('td');
-          var entry = metadataValueEntry(column, metadataColumn.id);
-          if (entry) {
-            metaCell.appendChild(renderMetadataValue(entry.value, entry.type || metadataColumn.dataType));
-          } else {
-            metaCell.appendChild(el('div', 'lf-cell-muted', '—'));
-          }
+          metaCell.appendChild(renderGovernanceCell(column, metadataColumn));
           row.appendChild(metaCell);
         });
 
@@ -2261,11 +2949,11 @@
           render();
         });
         collapsedSources.appendChild(expandSources);
-        collapsedSources.appendChild(el('div', 'lf-vertical-label', 'Data Sources'));
+        collapsedSources.appendChild(el('div', 'lf-vertical-label', 'Browse'));
         sourceRail.appendChild(collapsedSources);
       } else {
         var sourceHeader = el('div', 'lf-sidebar-header');
-        sourceHeader.appendChild(el('div', 'lf-sidebar-title', 'Data Sources'));
+        sourceHeader.appendChild(el('div', 'lf-sidebar-title', 'Browse'));
         var collapseSources = el('button', 'lf-panel-toggle', '<');
         collapseSources.type = 'button';
         collapseSources.addEventListener('click', function () {
@@ -2277,9 +2965,16 @@
 
         var sourceBody = el('div', 'lf-rail-body');
         sourceRail.appendChild(sourceBody);
+        var railStack = el('div', 'lf-stacked-rail');
+        sourceBody.appendChild(railStack);
+
+        var sourceSection = el('section', 'lf-rail-section');
+        railStack.appendChild(sourceSection);
+        sourceSection.appendChild(el('div', 'lf-rail-section-title', 'Data Sources'));
+        sourceSection.appendChild(el('div', 'lf-rail-section-copy', 'Choose a data source, then select one of its tables below.'));
 
         if (!dataSources().length) {
-          sourceBody.appendChild(el('div', 'lf-list-subtitle', 'No data sources are available for this organization.'));
+          sourceSection.appendChild(el('div', 'lf-list-subtitle', 'No data sources are available for this organization.'));
         } else {
           var sourceList = el('div', 'lf-list');
           dataSources().forEach(function (source) {
@@ -2290,46 +2985,27 @@
               state.selectedTableId = null;
               state.selectedColumnId = null;
               state.columnContext = null;
+              state.tableSearch = '';
+              resetDraftState();
               ensureSelections();
               render();
+              refreshDrafts(true);
             });
             button.appendChild(el('div', 'lf-list-title', source.name));
             button.appendChild(el('div', 'lf-list-subtitle', source.sourceType + ' • ' + source.tableCount + ' tables'));
             sourceList.appendChild(button);
           });
-          sourceBody.appendChild(sourceList);
+          sourceSection.appendChild(sourceList);
         }
-      }
 
-      if (state.selectedDataSourceId) {
-        var tableRail = el('aside', 'lf-rail lf-rail-compact ' + (state.tablesCollapsed ? 'lf-rail-collapsed' : 'lf-table-rail'));
-        layout.appendChild(tableRail);
+        var tablesSection = el('section', 'lf-rail-section');
+        railStack.appendChild(tablesSection);
+        tablesSection.appendChild(el('div', 'lf-rail-section-title', 'Tables'));
 
-        if (state.tablesCollapsed) {
-          var collapsedTables = el('div', 'lf-collapsed-rail');
-          var expandTables = el('button', 'lf-panel-toggle', '>');
-          expandTables.type = 'button';
-          expandTables.addEventListener('click', function () {
-            state.tablesCollapsed = false;
-            render();
-          });
-          collapsedTables.appendChild(expandTables);
-          collapsedTables.appendChild(el('div', 'lf-vertical-label', 'Tables'));
-          tableRail.appendChild(collapsedTables);
+        if (!state.selectedDataSourceId) {
+          tablesSection.appendChild(el('div', 'lf-rail-section-copy', 'Select a data source to load its tables.'));
         } else {
-          var tableHeader = el('div', 'lf-sidebar-header');
-          tableHeader.appendChild(el('div', 'lf-sidebar-title', 'Tables'));
-          var collapseTables = el('button', 'lf-panel-toggle', '<');
-          collapseTables.type = 'button';
-          collapseTables.addEventListener('click', function () {
-            state.tablesCollapsed = true;
-            render();
-          });
-          tableHeader.appendChild(collapseTables);
-          tableRail.appendChild(tableHeader);
-
-          var tableBody = el('div', 'lf-rail-body');
-          tableRail.appendChild(tableBody);
+          tablesSection.appendChild(el('div', 'lf-rail-section-copy', 'Filtered to ' + safeText(tableDataSource(selectedTable() || visibleTables()[0] || {}).name, 'the selected data source') + '.'));
 
           var search = createInput('text', state.tableSearch, 'Filter tables');
           search.addEventListener('input', function () {
@@ -2339,11 +3015,10 @@
             ensureSelections();
             render();
           });
-          tableBody.appendChild(search);
+          tablesSection.appendChild(search);
 
           var tableList = el('div', 'lf-list');
-          tableList.style.marginTop = '12px';
-          tableBody.appendChild(tableList);
+          tablesSection.appendChild(tableList);
           if (!visibleTables().length) {
             tableList.appendChild(el('div', 'lf-list-subtitle', 'No tables match this filter.'));
           } else {
@@ -2355,7 +3030,9 @@
                 state.selectedColumnId = null;
                 state.columnContext = null;
                 state.columnSearch = '';
+                resetDraftState();
                 render();
+                refreshDrafts(true);
               });
               button.appendChild(el('div', 'lf-list-title', table.name || 'Untitled table'));
               button.appendChild(el('div', 'lf-list-subtitle', safeArray(table.columns).length + ' columns • ' + safeArray(table.metadataColumns || table.metadata_columns).length + ' metadata fields'));
@@ -2482,13 +3159,196 @@
         metadataModal.appendChild(footer);
         root.appendChild(metadataBackdrop);
       }
+
+      if (state.draftCreateModal.open) {
+        var draftCreateBackdrop = el('div', 'lf-modal-backdrop');
+        draftCreateBackdrop.addEventListener('click', function (event) {
+          if (event.target === draftCreateBackdrop && !state.draftActionLoading) {
+            state.draftCreateModal = { open: false, title: '', description: '' };
+            render();
+          }
+        });
+        var draftCreateModal = el('div', 'lf-modal');
+        draftCreateBackdrop.appendChild(draftCreateModal);
+
+        var draftCreateHeader = el('div', 'lf-modal-header');
+        draftCreateHeader.appendChild(el('div', 'lf-modal-title', 'Create Draft'));
+        draftCreateModal.appendChild(draftCreateHeader);
+
+        var draftCreateBody = el('div', 'lf-modal-body');
+        draftCreateModal.appendChild(draftCreateBody);
+        draftCreateBody.appendChild(el('div', 'lf-modal-copy', 'Create a draft for ' + safeText(selectedTable() && selectedTable().name, 'this table') + '. Draft changes stay isolated from production until they are promoted for review.'));
+
+        var draftCreateGrid = el('div', 'lf-grid-1');
+        draftCreateBody.appendChild(draftCreateGrid);
+
+        var draftTitleStack = el('label', 'lf-label-stack');
+        draftTitleStack.appendChild(el('span', 'lf-label', 'Title'));
+        var draftTitleInput = createInput('text', state.draftCreateModal.title, 'e.g. Q2 metadata refresh');
+        draftTitleInput.addEventListener('input', function () {
+          state.draftCreateModal.title = draftTitleInput.value;
+        });
+        draftTitleStack.appendChild(draftTitleInput);
+        draftCreateGrid.appendChild(draftTitleStack);
+
+        var draftDescriptionStack = el('label', 'lf-label-stack');
+        draftDescriptionStack.appendChild(el('span', 'lf-label', 'Description'));
+        var draftDescriptionInput = createTextarea(state.draftCreateModal.description, 'Describe the draft you want to create...');
+        draftDescriptionInput.className = 'lf-textarea';
+        draftDescriptionInput.style.minHeight = '140px';
+        draftDescriptionInput.addEventListener('input', function () {
+          state.draftCreateModal.description = draftDescriptionInput.value;
+        });
+        draftDescriptionStack.appendChild(draftDescriptionInput);
+        draftCreateGrid.appendChild(draftDescriptionStack);
+
+        var draftCreateFooter = el('div', 'lf-modal-footer');
+        draftCreateFooter.appendChild(createButton('Cancel', '', function () {
+          if (state.draftActionLoading) return;
+          state.draftCreateModal = { open: false, title: '', description: '' };
+          render();
+        }));
+        var submitDraftButton = createButton(state.draftActionLoading ? 'Creating...' : 'Create Draft', 'primary', createDraft);
+        submitDraftButton.disabled = state.draftActionLoading;
+        draftCreateFooter.appendChild(submitDraftButton);
+        draftCreateModal.appendChild(draftCreateFooter);
+        root.appendChild(draftCreateBackdrop);
+      }
+
+      if (state.draftProposeModalOpen) {
+        var draftProposeBackdrop = el('div', 'lf-modal-backdrop');
+        draftProposeBackdrop.addEventListener('click', function (event) {
+          if (event.target === draftProposeBackdrop && !state.draftActionLoading) {
+            state.draftProposeModalOpen = false;
+            render();
+          }
+        });
+        var draftProposeModal = el('div', 'lf-modal');
+        draftProposeBackdrop.appendChild(draftProposeModal);
+
+        var draftProposeHeader = el('div', 'lf-modal-header');
+        draftProposeHeader.appendChild(el('div', 'lf-modal-title', 'Promote Draft for Review'));
+        draftProposeModal.appendChild(draftProposeHeader);
+
+        var draftProposeBody = el('div', 'lf-modal-body');
+        draftProposeModal.appendChild(draftProposeBody);
+        if (state.draftDiffLoading) {
+          draftProposeBody.appendChild(el('div', 'lf-modal-copy', 'Loading draft changes...'));
+        } else {
+          var diff = state.draftDiff;
+          var summary = diff && diff.summary ? diff.summary : { added: 0, modified: 0, newColumns: 0 };
+          var totalChanges = Number(summary.added || 0) + Number(summary.modified || 0) + Number(summary.newColumns || 0);
+          draftProposeBody.appendChild(el('div', 'lf-modal-copy', totalChanges
+            ? 'Review the changes below before promoting this draft. After promotion, the draft becomes read-only in MCP Views until it is reviewed in Ludflow.'
+            : 'This draft does not have any pending changes yet.'));
+          if (totalChanges) {
+            draftProposeBody.appendChild(el('div', 'lf-toolbar-badge', totalChanges + ' total change' + (totalChanges === 1 ? '' : 's')));
+          }
+          var diffList = el('div', 'lf-diff-list');
+          draftProposeBody.appendChild(diffList);
+          safeArray(diff && diff.changes).slice(0, 8).forEach(function (change) {
+            var item = el('div', 'lf-diff-item');
+            item.appendChild(el('div', 'lf-diff-item-title', safeText(change.columnName, 'Field') + ' / ' + safeText(change.metadataColumnName, 'Metadata')));
+            item.appendChild(el('div', 'lf-diff-item-copy', (change.changeType === 'added' ? 'Added' : 'Modified') + ' draft value'));
+            diffList.appendChild(item);
+          });
+          if (safeArray(diff && diff.newColumns).length) {
+            safeArray(diff.newColumns).forEach(function (column) {
+              var item = el('div', 'lf-diff-item');
+              item.appendChild(el('div', 'lf-diff-item-title', safeText(column.name, 'New metadata column')));
+              item.appendChild(el('div', 'lf-diff-item-copy', 'New metadata column • ' + safeText(column.dataType, 'TEXT')));
+              diffList.appendChild(item);
+            });
+          }
+          if (!totalChanges) {
+            diffList.appendChild(el('div', 'lf-help', 'Make at least one draft edit before promoting this draft.'));
+          } else if ((safeArray(diff && diff.changes).length || 0) > 8) {
+            diffList.appendChild(el('div', 'lf-help', '+' + (safeArray(diff.changes).length - 8) + ' more field changes'));
+          }
+        }
+
+        var draftProposeFooter = el('div', 'lf-modal-footer');
+        draftProposeFooter.appendChild(createButton('Cancel', '', function () {
+          if (state.draftActionLoading) return;
+          state.draftProposeModalOpen = false;
+          render();
+        }));
+        var canPromoteDraft = !!state.draftDiff && (
+          Number(state.draftDiff.summary && state.draftDiff.summary.added || 0) +
+          Number(state.draftDiff.summary && state.draftDiff.summary.modified || 0) +
+          Number(state.draftDiff.summary && state.draftDiff.summary.newColumns || 0)
+        ) > 0;
+        var promoteButton = createButton(state.draftActionLoading ? 'Promoting...' : 'Promote Draft', 'primary', promoteDraft);
+        promoteButton.disabled = state.draftActionLoading || state.draftDiffLoading || !canPromoteDraft;
+        draftProposeFooter.appendChild(promoteButton);
+        draftProposeModal.appendChild(draftProposeFooter);
+        root.appendChild(draftProposeBackdrop);
+      }
+
+      if (state.cellEditor) {
+        var editorBackdrop = el('div', 'lf-modal-backdrop');
+        editorBackdrop.addEventListener('click', function (event) {
+          if (event.target === editorBackdrop && !state.draftActionLoading) {
+            state.cellEditor = null;
+            render();
+          }
+        });
+        var editorModal = el('div', 'lf-modal');
+        editorBackdrop.appendChild(editorModal);
+
+        var editorHeader = el('div', 'lf-modal-header');
+        editorHeader.appendChild(el('div', 'lf-modal-title', 'Edit Draft Value'));
+        editorModal.appendChild(editorHeader);
+
+        var editorBody = el('div', 'lf-modal-body');
+        editorModal.appendChild(editorBody);
+        editorBody.appendChild(el('div', 'lf-modal-copy', safeText(state.cellEditor.columnName, 'Field') + ' / ' + safeText(state.cellEditor.metadataColumnName, 'Metadata field')));
+        editorBody.appendChild(el('div', 'lf-help', 'Type: ' + safeText(state.cellEditor.dataType, 'TEXT') + '. ' + editorHelpText(state.cellEditor.dataType)));
+
+        if (state.cellEditor.dataType === 'DATE') {
+          var dateStack = el('label', 'lf-label-stack');
+          dateStack.appendChild(el('span', 'lf-label', 'Value'));
+          var dateInput = createInput('date', state.cellEditor.value, '');
+          dateInput.addEventListener('input', function () {
+            state.cellEditor.value = dateInput.value;
+          });
+          dateStack.appendChild(dateInput);
+          editorBody.appendChild(dateStack);
+        } else {
+          var valueStack = el('label', 'lf-label-stack');
+          valueStack.appendChild(el('span', 'lf-label', 'Value'));
+          var valueInput = createTextarea(state.cellEditor.value, 'Enter the draft value...');
+          valueInput.className = 'lf-textarea lf-value-editor';
+          if (state.cellEditor.dataType !== 'TEXT') valueInput.className += ' lf-cell-input-mono';
+          valueInput.addEventListener('input', function () {
+            state.cellEditor.value = valueInput.value;
+          });
+          valueStack.appendChild(valueInput);
+          editorBody.appendChild(valueStack);
+        }
+
+        if (state.cellEditor.error) {
+          editorBody.appendChild(createNotice('error', state.cellEditor.error));
+        }
+
+        var editorFooter = el('div', 'lf-modal-footer');
+        editorFooter.appendChild(createButton('Cancel', '', function () {
+          if (state.draftActionLoading) return;
+          state.cellEditor = null;
+          render();
+        }));
+        var saveValueButton = createButton(state.draftActionLoading ? 'Saving...' : 'Save Value', 'primary', saveDraftEditorValue);
+        saveValueButton.disabled = state.draftActionLoading;
+        editorFooter.appendChild(saveValueButton);
+        editorModal.appendChild(editorFooter);
+        root.appendChild(editorBackdrop);
+      }
     }
 
     function render() {
       renderWorkspaceShell(container, state, {
         activeNav: 'governance',
         onRefresh: refreshData,
-        onThemeChange: render,
         breadcrumbs: function () {
           var crumbs = [
             { label: 'Home' },
@@ -2507,10 +3367,13 @@
           state.personalMappingsByEntryId = {};
           state.selectedTableId = data.table_id || null;
           state.selectedColumnId = data.column_id || null;
+          resetDraftState();
           refreshData();
         }
       }, renderBody, renderOverlay);
     }
+
+    observeHostTheme(container, state, render);
 
     loadOrganizations(state, state.currentOrgId)
       .then(function () {
